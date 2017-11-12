@@ -10,6 +10,8 @@ else
 	header("Location: index.php");
 	exit();
 }
+
+
 $result = mysqli_query($con,"SELECT * FROM usertbl WHERE username = '$username'")or die(mysqli_error($con));
 $user_rows = mysqli_fetch_array($result);
 $username = $user_rows['username'];

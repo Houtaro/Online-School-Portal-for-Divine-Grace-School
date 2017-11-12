@@ -38,7 +38,6 @@
 													<th></th>
 													<th>Curriculum</th>
 													<th>Program Code</th>
-													<th>Date Created</th>
 													<th></th>
 												</tr>
 											</thead>
@@ -48,7 +47,6 @@
 													<td class="text-center"><input type="checkbox" name="Selector[]" value="<?php echo $row['id']; ?>"></td>
 													<td><?php echo $row['curname']; ?></td>
 													<td><?php echo $row['gradelevel']; ?></td>
-													<td><?php echo $row['datecreated']; ?></td>
 													<td><button type="button" id="btnedit" data-toggle="tooltip" title="Edit" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
 												</tr>
 												<?php } ?>
@@ -68,7 +66,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title"><i class="fa fa-plus-circle"> Add curriculum</i></h3>
 							</div>
-							<form id="validate_curriculum" action="function/add_function" method="post">
+							<form id="validate_curriculum" action="crud_function.php" method="post">
 								<input type="hidden" name="txtcumid" id="txtcumid">
 								<div class="box-body table-responsive">
 									<div class="form-group">

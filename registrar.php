@@ -33,7 +33,7 @@
 											<tbody> 
 												<?php 
 
-												$query = "SELECT * FROM usertbl WHERE usertype = 'teacher'";
+												$query = "SELECT * FROM usertbl WHERE usertype = 'registrar'";
 												$result = mysqli_query($con, $query);
 
 												while($row = mysqli_fetch_array($result))
@@ -99,7 +99,7 @@
 											<input type="text" class="form-control" name="txtContact" id="txtContact" required>
 										</div>
 										<input type="hidden" id="id" name="id" value="">
-										<button type="submit" name="btnAddTeacher" id="btnAddTeacher" class="btn btn-primary">Add</button>
+										<button type="submit" name="btnAddRegistrar" id="btnAddRegistrar" class="btn btn-primary">Add</button>
 										<button type="button" onclick="clean()" id="clear" class="btn btn-info">Clear</button>
 										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
 										<button type="submit" id="btn_edit" style="display:none;" name="editTeacher" class="btn btn-success">Update</button>
@@ -134,7 +134,7 @@
 				$("#txtUsername").val($(obj).attr("username"));
 				$("#txtContact").val($(obj).attr("contact"));
 				$("#id").val($(obj).attr("userid"));
-				$("#btnAddTeacher").hide();
+				$("#btnAddRegistrar").hide();
 				$("#btn_back").show();
 				$("#btn_edit").show();
 			}
@@ -143,7 +143,7 @@
 				clean();
 				$("#btn_back").hide();
 				$("#btn_edit").hide();
-				$("#btnAddTeacher").show();
+				$("#btnAddRegistrar").show();
 			})
 
 			function activeInactive(obj)

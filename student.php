@@ -114,6 +114,7 @@
 		<?php include "inc/modal.php"; ?>
 		<script>
 			function addstudparent(id){
+				$("#studentid").val(id);
 				$('#studparentmodal').modal("show");
 			}
 			function edit(obj)
