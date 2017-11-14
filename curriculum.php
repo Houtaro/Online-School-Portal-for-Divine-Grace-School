@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Online Grading System </title>
+	<title>Curriculum - Online School Portal</title>
 	<?php include "inc/navbar.php"; ?>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-green sidebar-mini">
 	<div class="wrapper">
 		<?php include "inc/header.php"; ?>
 		<div class="content-wrapper">
@@ -21,38 +21,32 @@
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<?php if ($cnt > 0) { ?>
-								<div class="btn-group">
-									<button type="button" data-toggle="tooltip" title="Check All" class="btn btn-default checkbox-toggle"><i class="fa fa-square-o"></i>
-									</button>
-									<button type="button" data-toggle="tooltip" title="Delete" onclick="del_curriculum()" class="btn btn-default"><i class="fa fa-trash-o"></i></button>
-								</div>
+								<button type="button" data-toggle="tooltip" title="Delete" onclick="del_curriculum()" class="btn btn-danger">Delete</button>
 								<?php } ?>
 							</div>
 							<div class="box-body">
 								<?php if ($cnt > 0) { ?>
 								<form action="function/del_function" method="post">
-									<div class="mailbox-messages table-responsive">
-										<table class="table table-bordered" id="example">
-											<thead>
-												<tr class="header-table">
-													<th></th>
-													<th>Curriculum</th>
-													<th>Program Code</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<?php while ($row = mysqli_fetch_array($query)) { ?>
-												<tr>
-													<td class="text-center"><input type="checkbox" name="Selector[]" value="<?php echo $row['id']; ?>"></td>
-													<td><?php echo $row['curname']; ?></td>
-													<td><?php echo $row['gradelevel']; ?></td>
-													<td><button type="button" id="btnedit" data-toggle="tooltip" title="Edit" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
-												</tr>
-												<?php } ?>
-											</tbody>
-										</table>
-									</div>
+									<table class="table table-bordered table-responsive" id="example">
+										<thead>
+											<tr class="header-table">
+												<th class="text-center"><input type="checkbox" id="checkall"></th>
+												<th>Curriculum</th>
+												<th>Department</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php while ($row = mysqli_fetch_array($query)) { ?>
+											<tr>
+												<td width="40" class="text-center"><input type="checkbox" id="record" name="Selector[]" value="<?php echo $row['id']; ?>"></td>
+												<td><?php echo $row['curname']; ?></td>
+												<td><?php echo $row['gradelevel']; ?></td>
+												<td width="40"><button type="button" id="btnedit" data-toggle="tooltip" title="Edit" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
+											</tr>
+											<?php } ?>
+										</tbody>
+									</table>
 								</form>
 								<?php } else { ?>
 								<div class="alert alert-danger">No curriculum added.</div>
@@ -76,54 +70,58 @@
 									<div class="form-group">
 										<label>Grade Level</label>
 										<select name="txtprogram" id="txtprogram" class="form-control" required>
-											<?php
-											$query_class = "SELECT * from tblyearlevel";
-											$result = mysqli_query($con,$query_class);
-											while($row = mysqli_fetch_array($result)){
-												?>
-												<option value="<?php echo $row['yearlevel']; ?>"><?php echo $row['yearlevel']; ?></option>
-												<?php } ?>
-											</select>  
-										</div>
-										<button type="submit" id="add_curriculum" name="add_curriculum" class="btn btn-primary">Add curriculum</button>
-										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
-										<button type="submit" id="edit_curriculum" style="display:none;" name="edit_curriculum" class="btn btn-success">Update</button>
+											<option>Elementary</option>
+											<option>Junior High School</option>
+										</select>  
 									</div>
-								</form>
-							</div>
+									<button type="submit" id="add_curriculum" name="add_curriculum" class="btn btn-primary">Add curriculum</button>
+									<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
+									<button type="submit" id="edit_curriculum" style="display:none;" name="edit_curriculum" class="btn btn-success">Update</button>
+								</div>
+							</form>
 						</div>
 					</div>
-				</section>
-			</div>
-			<?php include "inc/sidebar.php"; ?>
-			<?php include "inc/script.php"; ?>
+				</div>
+			</section>
 		</div>
-		<script type="text/javascript">
-			$('table #btnedit').click(function() {
-				var tr = $(this).closest('tr');
-				var cumid = tr.find('input:checkbox').val();
-				var curriculum = tr.children('td:eq(1)').text();
-				var program = tr.children('td:eq(2)').text();
-				var unit = tr.children('td:eq(3)').text();
+		<?php include "inc/sidebar.php"; ?>
+		<?php include "inc/script.php"; ?>
+	</div>
+	<script type="text/javascript">
+		$("#checkall").click(function()
+		{
+			if ($("#checkall").is(':checked')) {
+				$("input#record").prop("checked", true);
+			} else {
+				$("input#record").prop("checked", false);
+			}
+		})
 
-				$("#txtcumid").val(cumid);
-				$("#txtcurriculum").val(curriculum);
-				$("#txtprogram").val(program);
-				$("#txtunit").val(unit);
-				$("#btn_back").show();
-				$("#edit_curriculum").show();
-				$("#add_curriculum").hide();
-			});
+		$('table #btnedit').click(function() {
+			var tr = $(this).closest('tr');
+			var cumid = tr.find('input:checkbox').val();
+			var curriculum = tr.children('td:eq(1)').text();
+			var program = tr.children('td:eq(2)').text();
+			var unit = tr.children('td:eq(3)').text();
 
-			$("#btn_back").click(function(){
-				$("#txtcumid").val("");
-				$("#txtcurriculum").val("");
-				$("#txtprogram").val("");
-				$("#txtunit").val("");
-				$("#btn_back").hide();
-				$("#edit_curriculum").hide();
-				$("#add_curriculum").show();
-			})
-		</script>
-	</body>
-	</html>
+			$("#txtcumid").val(cumid);
+			$("#txtcurriculum").val(curriculum);
+			$("#txtprogram").val(program);
+			$("#txtunit").val(unit);
+			$("#btn_back").show();
+			$("#edit_curriculum").show();
+			$("#add_curriculum").hide();
+		});
+
+		$("#btn_back").click(function(){
+			$("#txtcumid").val("");
+			$("#txtcurriculum").val("");
+			$("#txtprogram").val("");
+			$("#txtunit").val("");
+			$("#btn_back").hide();
+			$("#edit_curriculum").hide();
+			$("#add_curriculum").show();
+		})
+	</script>
+</body>
+</html>

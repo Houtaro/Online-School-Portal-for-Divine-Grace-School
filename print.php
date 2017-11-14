@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
 <?php include "inc/navbar.php"; ?>
+<style type="text/css">
+#title-print{ margin-top: -60px; text-align: center; }
+#address-print{ text-align: center; }
+#contact-print{ text-align: center; }
+#logo-print{ position: absolute; left: 14%; top:34px; }
+.print-box{ width: 100%; background: #fff; height: auto; padding: 20px; padding-top: 100px; }
+@media print{ #print { display:none; } }
+</style>
 <body>
 	<div class="print-box">
-		<div id="logo-print"><img src="images/logo.jpg" height="50" width="50"></div>
-		<h5 id="title-print">DATAMEX COLLEGE OF ST. ADELINE</h5>
-		<h5 id="address-print">address</h5>
-		<h5 id="contact-print">contact</h5>
+		<div id="logo-print"><img src="images/logo.png" height="50" width="50"></div>
+		<h5 id="title-print">Divine Grace School</h5>
+		<h5 id="address-print">Sampaguita Street Maligaya Park Subdivision Novaliches,<br> Novaliches Quezon City, 1118 Metro Manila</h5>
+		<h5 id="contact-print">367-47-42</h5>
 		<button id="print" class="btn btn-default" onclick="window.history.back()">Back</button>
 		<?php 
 		if(!empty($_GET['classid']) && !empty($_GET['subid']) || $userType == 'student'){

@@ -16,7 +16,7 @@
 					<div class="col-sm-7">
 						<div class="box box-primary">
 							<div class="box-body">
-								<form name="activeInactiveTeacher" method="post" action="crud_function.php">
+								<form name="activeInactiveRegistrar" method="post" action="crud_function.php">
 									<div class="tables">
 										<table class="table table-bordered"> 
 											<thead> 
@@ -51,11 +51,11 @@
 
 														if($row['status'] == 0)
 														{
-															echo "<td><center><button  name='activeTeacherBtn' teacherid='" . $row['id'] . "' onclick='activeInactive(this)' class='btn btn-success btn-sm'>Active</button></center></td>";
+															echo "<td><center><button  name='activeRegistrarBtn' teacherid='" . $row['id'] . "' onclick='activeInactive(this)' class='btn btn-success btn-sm'>Active</button></center></td>";
 														}	
 														else
 														{
-															echo "<td><center><button name='activeTeacherBtn' teacherid='" . $row['id'] . "' onclick='activeInactive(this)' class='btn btn-danger btn-sm'>Inactive</button></center></td>";
+															echo "<td><center><button name='activeRegistrarBtn' teacherid='" . $row['id'] . "' onclick='activeInactive(this)' class='btn btn-danger btn-sm'>Inactive</button></center></td>";
 														}
 
 														?>	
@@ -102,7 +102,7 @@
 										<button type="submit" name="btnAddRegistrar" id="btnAddRegistrar" class="btn btn-primary">Add</button>
 										<button type="button" onclick="clean()" id="clear" class="btn btn-info">Clear</button>
 										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
-										<button type="submit" id="btn_edit" style="display:none;" name="editTeacher" class="btn btn-success">Update</button>
+										<button type="submit" id="btn_edit" style="display:none;" name="editregistrar" class="btn btn-success">Update</button>
 									</form>
 								</div>
 							</div>
@@ -149,13 +149,13 @@
 			function activeInactive(obj)
 			{
 				$("#teacherid").val($(obj).attr("teacherid"));
-				document.activeInactiveTeacher.submit();
+				document.activeInactiveRegistrar.submit();
 			}
 
 			function activeInactive(obj)
 			{
 				$("#teacherid").val($(obj).attr("teacherid"));
-				document.activeInactiveTeacher.submit();
+				document.activeInactiveRegistrar.submit();
 			}
 		</script>
 	</body>

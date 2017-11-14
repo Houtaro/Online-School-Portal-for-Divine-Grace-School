@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Year Level - Online Portal </title>
+	<title>Grade Level - Online Portal </title>
 	<?php include "inc/navbar.php"; ?>
 </head>
 <body class="hold-transition fixed skin-green sidebar-mini">
@@ -9,7 +9,7 @@
 		<?php include "inc/header.php"; ?>
 		<div class="content-wrapper">
 			<section class="content-header">
-				<h1> Manage - <small>Year Level</small> </h1>
+				<h1> Manage - <small>Grade Level</small> </h1>
 			</section>
 			<section class="content">
 				<div class="row">
@@ -25,7 +25,7 @@
 										<thead> 
 											<tr>
 												<th><input type="checkbox" id="checkall"></th>
-												<th>Year Level</th> 
+												<th>Grade Level</th> 
 												<th>Description</th> 
 												<th></th>
 											</tr> 
@@ -59,7 +59,7 @@
 								<div class="box-body">
 									<form action="crud_function.php" method="post">
 										<div class="form-group">
-											<label>Year Level</label>
+											<label>Grade Level</label>
 											<input type="text" class="form-control" name="yearlevel" id="txtYearLevel" required>
 										</div>
 										<div class="form-group">

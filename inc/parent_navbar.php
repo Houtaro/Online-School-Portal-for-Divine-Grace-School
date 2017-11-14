@@ -1,4 +1,3 @@
-<!-- START OF THE HEADER -->
 <header class="main-header">
 	<nav class="navbar navbar-static-top">
 		<div class="container">
@@ -19,7 +18,7 @@
 					$cntmes = mysqli_num_rows($select_mes);
 					?>
 					<li><a onclick="checkstatus()" href="#"><i class="fa fa-envelope-o fa-lg"></i> &nbsp;Messages <span class="label label-primary"><?php if ($cntmes > 0){ echo $cntmes; } else { echo ""; } ?></span></a></li>
-					<li><a href="myclass.php"><i class="fa fa-book fa-lg"></i> &nbsp;Grades</a></li>
+					<li><a href="mygrades.php"><i class="fa fa-book fa-lg"></i> &nbsp;Grades</a></li>
 					<li><a href="studclearance.php"><i class="fa fa-file fa-lg"></i> &nbsp;Clearance</a></li>
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -48,6 +47,7 @@
 		</div>
 	</nav>
 </header>
+
 <script>
 	function checkstatus(){
 		$("#seenmes").click();

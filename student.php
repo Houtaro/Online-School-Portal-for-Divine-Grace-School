@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Student - Online Portal </title>
+	<title>Student - Online School Portal</title>
 	<?php include "inc/navbar.php"; ?>
 </head>
 <body class="hold-transition fixed skin-green sidebar-mini">
@@ -58,7 +58,7 @@
 
 													?>
 													<td><button type="button" style="margin:0px;" userid="<?php echo $row['id']; ?>" firstname="<?php echo $row['fname']; ?>" middlename="<?php echo $row['mname']; ?>" lastname="<?php echo $row['lname']; ?>" username="<?php echo $row['username']; ?>" contact="<?php echo $row['contact']; ?>" class="btn btn-success btn-sm"  onclick="edit(this)"> Edit</button>
-														<button class="btn btn-primary btn-sm" data-toggle="tooltip" title="Add student parent" onclick="addstudparent('<?php echo $row['id']; ?>')" type="button"><i class="fa fa-plus-circle"></i></button>
+													<a data-toggle="tooltip" title="Add Student Parent" href="addstud_parent.php<?php echo '?id='. $row['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
 													</td> 
 												</tr> 
 												<?php } ?>
@@ -113,10 +113,6 @@
 		<?php include "inc/script.php"; ?>
 		<?php include "inc/modal.php"; ?>
 		<script>
-			function addstudparent(id){
-				$("#studentid").val(id);
-				$('#studparentmodal').modal("show");
-			}
 			function edit(obj)
 			{
 				$("#txtFirstname").val($(obj).attr("firstname"));

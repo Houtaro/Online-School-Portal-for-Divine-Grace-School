@@ -23,10 +23,9 @@
 								<small><?php //echo $row['Email']; ?></small>
 							</p>
 						</li>
+						<button style="margin:10px 0px 0px 4px;" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#changepicmodal">Change Profile</button>
+						<a style="margin:10px 0px 0px 4px;" data-toggle="modal" data-target="#changepassmodal" class="btn btn-default btn-flat">Change Password</a>
 						<li class="user-footer">
-							<div class="pull-left">
-								<a data-toggle="modal" data-target="#changepassmodal" class="btn btn-default btn-flat">Change Password</a>
-							</div>
 							<div class="pull-right">
 								<a href="logout.php" class="btn btn-default btn-flat">Logout</a>
 							</div>

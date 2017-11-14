@@ -29,6 +29,20 @@ if(isset($_POST['btnSubmit']))
 				$_SESSION['username'] = $row['username'];
 				header("LOCATION: student_dashboard.php");
 			}
+			else if($userType === "parent")
+			{
+				$_SESSION['username'] = $row['username'];
+				header("LOCATION: teacher_dashboard.php");
+			}
+			else if($userType === "registrar")
+			{
+				$_SESSION['username'] = $row['username'];
+				header("LOCATION: teacher_dashboard.php");
+			}
+			else
+			{
+				?> <script> alert("Invalid password and username."); window.location = "index.php"; </script><?php
+			}
 		}else{
 			?> <script> alert("Invalid password and username."); window.location = "index.php"; </script><?php
 		}

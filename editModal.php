@@ -1,4 +1,3 @@
-<!-- ========= SCHOOLYEAR MODAL ======== -->
 <?php 
 include "conn.php";
 $id = $_POST['sgid'];
@@ -25,7 +24,7 @@ $rowsy = mysqli_fetch_array($resultsy);
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 style="margin:0px;" class="modal-title">Edit Student Grade</h4>
+            <h4 style="margin:0px;" class="modal-title"><i class="fa fa-edit fa-lg"></i> Edit Student Grade</h4>
         </div>
         <div class="modal-body">
             <input type="hidden" value="<?php echo $row['sgid'] ?>" name="hidden_id" id="hidden_id"/>

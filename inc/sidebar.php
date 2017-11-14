@@ -27,7 +27,7 @@
 </a>
 <ul class="treeview-menu">
  <li><a href="school_year.php"> <span>School Year</span></a></li>
- <li><a href="year_level.php"> <span>Year Level</span></a></li>
+ <li><a href="year_level.php"> <span>Grade Level</span></a></li>
  <li><a href="curriculum.php"> <span>Curriculum</span></a></li>
  <li><a href="subject.php"> <span>Subject</span></a></li>
  <li><a href="class.php"> <span>Class</span></a></li>
@@ -49,7 +49,7 @@
   </span>
 </a>
 <ul class="treeview-menu">
- <li><a href="student_class.php"> <span>Student Class</span></a></li>
+ <li><a href="student_class.php"> <span>Enroll Student</span></a></li>
  <li><a href="teacher_advisory.php"> <span>Teacher Advisory</span></a></li>
 </ul>
 </li>
@@ -75,7 +75,7 @@
   </span>
 </a>
 <ul class="treeview-menu">
- <li><a href="backup_restore_db.php"><i class="fa fa-archive"></i> <span>Activity Log</span></a></li>
+ <li><a href="activitylog.php"><i class="fa fa-archive"></i> <span>Activity Log</span></a></li>
 </ul>
 </li>
 </ul>

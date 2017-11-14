@@ -21,8 +21,9 @@
 								<div class="box-body">
 									<form id="submitclass" action="crud_function.php" method="post">
 										<?php 
-										$query = "SELECT tblteacheradvisory.id, usertbl.fname, usertbl.mname, usertbl.lname, tblclass.classname, tblsubjects.subjectname, tblsubjects.description FROM tblteacheradvisory 
+										$query = "SELECT tblteacheradvisory.id, usertbl.fname, usertbl.mname, usertbl.lname, tblclass.classname, tblsubjects.subjectname, tblsubjects.description, tblyearlevel.yearlevel FROM tblteacheradvisory 
 										left join usertbl on usertbl.id = tblteacheradvisory.teacherid
+										left join tblyearlevel on tblteacheradvisory.gradelvl = tblyearlevel.id 
 										left join tblsubjects on tblsubjects.id = tblteacheradvisory.subjectid
 										left join tblclass on tblclass.id = tblteacheradvisory.classid WHERE usertbl.usertype = 'teacher'";
 										$result = mysqli_query($con, $query)or die(mysqli_error($con));
@@ -36,6 +37,7 @@
 														<tr>
 															<th><input type="checkbox" id="checkall"></th> 
 															<th>Teacher Name</th> 
+															<th>Grade Level</th>
 															<th>Class</th> 
 															<th>Subject</th>
 															<th></th>
@@ -46,9 +48,10 @@
 														<tr> 
 															<th scope="row"><input type="checkbox" id="record" name="subid[]" value="<?php echo $row['id']; ?>"></th>
 															<td><?php echo $row['fname']." ".$row['mname']." ".$row['lname']; ?></td>
+															<td><?php echo $row['yearlevel']; ?></td> 
 															<td><?php echo $row['classname']; ?></td> 
 															<td><?php echo $row['subjectname']." - ".$row['description']; ?></td>  
-															<td><button type="button" onclick="editStudentClass(<?php echo $row['id']; ?>)" id="edit_studclass" class="btn btn-success">Edit</button></td>
+															<td><button type="button" title="Edit" data-toggle="tooltip" onclick="editStudentClass(<?php echo $row['id']; ?>)" id="edit_studclass" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
 														</tr> 
 														<?php } ?>
 													</tbody> 
@@ -70,44 +73,51 @@
 									<div class="box-body">
 										<form action="crud_function.php" method="post">
 											<input type="hidden" id="studclass_id" name="studclass_id">
+											<input type="hidden" name="txtschoolyear" value="<?php echo $rowsy['id']; ?>">
 											<div class="form-group">
-												<label>Teacher:</label>
-												<select class="form-control" style="padding:8px;"  name="cboempid" id="cboempid" required>
-													<option></option>
+												<label>Curriculum Name:</label>
+												<select class="form-control" style="padding:8px;" name="cboclass"  id="cboclass" required>
+													<option selected disabled>--Select Curriculum--</option>
 													<?php 
-													$query = "SELECT * FROM usertbl where usertype='teacher'";
+													$query = "SELECT * FROM curriculumtbl";
 													$result = mysqli_query($con, $query);
 													while($row = mysqli_fetch_array($result)){
 														?>
-														<option value="<?php echo $row['id']; ?>"><?php echo $row['fname']." ".$row['lname']; ?></option>
+														<option value="<?php echo $row['id']; ?>"><?php echo $row['curname']; ?></option>
 														<?php } ?>
 													</select>
 												</div>
-
 												<div class="form-group">
-													<label>Class:</label>
-													<select class="form-control" style="padding:8px;" name="cboclass"  id="cboclass" required>
-														<option></option>
+													<label>Grade Level:</label>
+													<select class="form-control" name="cboclass"  id="cboclass" required>
+														<option selected disabled>--Select Grade Level--</option>
 														<?php 
-														$query = "SELECT * FROM tblclass";
+														$query = "SELECT * FROM tblyearlevel";
 														$result = mysqli_query($con, $query);
 														while($row = mysqli_fetch_array($result)){
 															?>
-															<option value="<?php echo $row['id']; ?>"><?php echo $row['classname']; ?></option>
+															<option value="<?php echo $row['id']; ?>"><?php echo $row['yearlevel']; ?></option>
 															<?php } ?>
 														</select>
 													</div>
 
 													<div class="form-group">
-														<label>Subject:</label>
-														<select class="form-control" style="padding:8px;" name="cbosubjectid"  id="cbosubjectid" required>
+														<label>Class:</label>
+														<select class="form-control" name="cboclass"  id="cboclass" required></select>
+													</div>	
+
+													<div id="showsubject"> </div>
+
+													<div class="form-group">
+														<label>Teacher:</label>
+														<select class="form-control" style="padding:8px;"  name="cboempid" id="cboempid" required>
 															<option></option>
 															<?php 
-															$query = "SELECT * FROM tblsubjects";
+															$query = "SELECT * FROM usertbl where usertype='teacher'";
 															$result = mysqli_query($con, $query);
 															while($row = mysqli_fetch_array($result)){
 																?>
-																<option value="<?php echo $row['id']; ?>"><?php echo $row['subjectname']." - ".$row['description']; ?></option>
+																<option value="<?php echo $row['id']; ?>"><?php echo $row['fname']." ".$row['lname']; ?></option>
 																<?php } ?>
 															</select>
 														</div>

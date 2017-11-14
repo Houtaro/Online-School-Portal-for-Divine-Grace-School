@@ -11,8 +11,8 @@
  			<div class="navbar-custom-menu">
  				<ul class="nav navbar-nav">
  					<li><a href="teacher_dashboard.php"><i class="fa fa-home fa-lg"></i> Home</a></li>
- 					<li><a href="studgrade.php"><i class="fa fa-book fa-lg"></i> &nbsp;Grades</a></li>
- 					<li><a href="studclearance.php"><i class="fa fa-file fa-lg"></i> &nbsp;Clearance</a></li>
+ 					<li><a href="allgrade.php"><i class="fa fa-book fa-lg"></i> &nbsp;Grades</a></li>
+ 					<li><a href="allclearance.php"><i class="fa fa-file fa-lg"></i> &nbsp;Clearance</a></li>
  					<li class="dropdown user user-menu">
  						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
  							<span class="hidden-xs"><i class="fa fa-cog fa-lg"></i> &nbsp;Settings</span>
@@ -22,7 +22,7 @@
  								<img src="<?php echo $profile_pic; ?>" class="img-circle">
  								<p>
  									<?php echo $name; ?>
- 									<small><?php //echo $row['Email']; ?></small>
+ 									<small><?php echo $contact; ?></small>
  								</p>
  							</li>
  							<li class="user-footer">

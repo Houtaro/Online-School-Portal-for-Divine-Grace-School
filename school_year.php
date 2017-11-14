@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Online Grading System </title>
+	<title>School Year - Online School Portal</title>
 	<?php include "inc/navbar.php"; ?>
 </head>
 <body class="hold-transition fixed skin-green sidebar-mini">
@@ -10,7 +10,7 @@
 		<div class="content-wrapper">
 			<section class="content-header">
 				<h1>
-					Manage - <small>Administrator</small>
+					Manage - <small>School Year</small>
 				</h1>
 			</section>
 			<section class="content">
