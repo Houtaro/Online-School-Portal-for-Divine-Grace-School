@@ -54,7 +54,7 @@
 						<div class="col-sm-5">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<h3 class="box-title"><i class="fa fa-plus-circle"> Add Slide Show</i></h3>
+									<h3 class="box-title"><i class="fa fa-plus-circle"> Add Year level</i></h3>
 								</div>
 								<div class="box-body">
 									<form action="crud_function.php" method="post">

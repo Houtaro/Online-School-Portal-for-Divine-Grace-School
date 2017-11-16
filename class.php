@@ -27,6 +27,7 @@
  													<th>Class Name</th> 
  													<th>School Year</th> 
  													<th>Year Level</th>
+ 													<th>Curriculum</th>
  													<th></th>
  												</tr> 
  											</thead>
@@ -63,8 +64,36 @@
  															$yearlevel = $rows['yearlevel'];
  														}
  														?>
- 														<td><?php echo $yearlevel; ?></td> 
- 														<td width="50"><button type="button" style="margin:0px;padding:8px;" classid="<?php echo $row['id']; ?>" schoolyearid="<?php echo $row['schoolyearid']; ?>" yearlevelid="<?php echo $row['yearlevelid']; ?>" classname="<?php echo $row['classname']; ?>" schoolyear="<?php echo $schoolyear; ?>" yearlevel="<?php echo $yearlevel; ?>" onclick="edit(this)" class="btn btn-success">Edit</button></td> 
+ 														<td><?php echo $yearlevel; ?></td>
+ 														<td>
+ 															<?php
+
+ 																$query4 = "SELECT * FROM curriculumtbl WHERE id = " . $row['cur_id'];
+ 																$result4 = mysqli_query($con, $query4);
+
+ 																$curname = "";
+ 																while($rows = mysqli_fetch_array($result4))
+ 																{
+ 																	$curname = $rows['curname'];
+ 																}
+ 																echo $curname;
+ 															?>
+ 														</td>
+ 														<td width="50">
+ 															<button 
+	 															type="button" 
+	 															style="margin:0px;padding:8px;" 
+	 															cl-na="<?php echo $row['classname']; ?>" 
+	 															classid="<?php echo $row['id']; ?>" 
+	 															schoolyearid="<?php echo $row['schoolyearid']; ?>" 
+	 															yearlevelid="<?php echo $row['yearlevelid']; ?>"  
+	 															schoolyear="<?php echo $schoolyear; ?>" 
+	 															yearlevel="<?php echo $yearlevel; ?>"
+	 															cur-id="<?php echo $row['cur_id']; ?>" 
+	 															onclick="edit(this)" 
+	 															class="btn btn-success">Edit
+	 														</button>
+ 														</td> 
  													</tr> 
  													<?php } ?>
  												</tbody> 
@@ -116,11 +145,32 @@
  													</select>
  												</div>
 
+ 												<div class="form-group">
+ 													<label>Curriculum</label>
+ 													<select name="cboCurriculum" id="cboCurriculum" class="form-control">
+ 														<option></option>
+ 														<?php
+
+ 															$query = "SELECT * FROM curriculumtbl";
+ 															$result = mysqli_query($con, $query);
+
+ 															while($row = mysqli_fetch_array($result))
+ 															{
+ 																?>
+ 																<option value="<?php echo $row['id']; ?>"><?php echo $row['curname']; ?></option>
+ 																<?php
+
+ 															}
+
+ 														?>
+ 													</select>
+ 												</div>
+
  												<input type="hidden" name="schoolyearid" id="schoolyearid">
  												<input type="hidden" name="yearlevelid" id="yearlevelid">
  												<input type="hidden" name="classid" id="classid">
 
- 												<button type="submit" name="btnAddClass" id="btnAddClass" onclick="send()" class="btn btn-primary">Add</button>
+ 												<button type="submit" name="btnAddClass" id="btnAddClass"  class="btn btn-primary">Add</button>
  												<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
  												<button type="submit" id="btn_edit" style="display:none;" name="edit_class" class="btn btn-success">Update</button>
  											</form>
@@ -150,13 +200,14 @@
  					})
  					function edit(obj)
  					{
- 						$("#txtClassName").val($(obj).attr("classname"));
+ 						$("#txtClassName").val(obj.parentNode.parentNode.childNodes[3].innerHTML);
  						$("#cboSchoolYear").val($(obj).attr("schoolyear"));
  						$("#cboYearLevel").val($(obj).attr("yearlevel"));
 
  						$("#classid").val($(obj).attr("classid"));
  						$("#schoolyearid").val($(obj).attr("schoolyearid"));
  						$("#yearlevelid").val($(obj).attr("yearlevelid"));
+ 						$("#cboCurriculum").val($(obj).attr("cur-id"));
  						$("#btnAddClass").hide();
  						$("#btn_back").show();
  						$("#btn_edit").show();

@@ -13,13 +13,13 @@
 			</section>
 			<section class="content">
 				<div class="row">
-					<form action="crud_function.php" method="post" name="frmActiveAdmin">
+					<form action="crud_function.php" method="post" name="del_slides" id="del_slides">
 						<div class="col-sm-7">
 							<div class="box box-primary">
 								<div class="box-header with-border">
-									<button type="button" id="del_subject" class="btn btn-danger">Delete</button>
+									<button type="button" id="del_slide" class="btn btn-danger" onclick="del_slideshow()">Delete</button>
 								</div>
-								<input type="hidden" name="del_subject" value="1">
+								<input type="hidden" name="del_slidepic" value="1">
 								<div class="box-body">
 									<table class="table table-bordered"> 
 										<thead> 
@@ -71,6 +71,15 @@
 			</div>
 			<?php include "inc/script.php"; ?>
 			<script>
+
+				function del_slideshow()
+				{
+					var conf = confirm("Are you sure you want to delete the selected slide/s?");
+					if(conf == true){
+						$("#del_slides").submit();
+					}
+				}
+
 				$("#checkall").click(function()
 				{
 					if ($("#checkall").is(':checked')) {

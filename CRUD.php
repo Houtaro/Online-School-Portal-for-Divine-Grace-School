@@ -51,6 +51,7 @@
       }
 
       mysqli_query($this->con, $this->queryBuilder)or die(mysqli_error($this->con));
+
       $this->queryBuilder = "";
     }
 
@@ -73,8 +74,8 @@
       for ( $i = 1; $i < count($columnNames); $i++ ) {
         $this->queryBuilder .= ( $i == count($columnNames) - 1 ) ? $columnNames[$i] . " = '" . $values[$i] . "' WHERE " . $columnNames[0] . " = " . $values[0] :  $columnNames[$i] . " = '" . $values[$i] . "', ";
       }
-
       mysqli_query($this->con, $this->queryBuilder)or die(mysqli_error($this->con));
+      
       $this->queryBuilder = "";
     }
 

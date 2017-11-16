@@ -24,7 +24,8 @@ select { -webkit-appearance: none; -moz-appearance: none; text-indent: 1px; text
                 <h3 class="box-title">Inbox</h3>
               </div>
               <div class="box-body">
-                <form action="function/delete_function" method="post">
+                <form action="crud_function.php" method="post" id="frmMsg">
+                  <input type="hidden" name="del_message" value="1">
                   <?php 
                   $query = "SELECT U.*,U.id as uid,C.*,C_R.* from conversation_tbl C, usertbl U, conversation_reply C_R 
                   LEFT JOIN conversation_reply C_R2 ON (C_R.c_id_fk = C_R2.c_id_fk AND C_R.CR_ID < C_R2.CR_ID)
@@ -41,7 +42,7 @@ select { -webkit-appearance: none; -moz-appearance: none; text-indent: 1px; text
                   <div class="btn-group">
                     <?php if ($count > 0) { ?>
                     <button type="submit" data-toggle="tooltip" title="Mark as read" class="btn btn-default btn-sm" name="mark_read_mes"><i class="fa fa-check fa-lg"></i></button>
-                    <button type="button" data-toggle="tooltip" title="Delete" onclick="showModal()" class="btn btn-default btn-sm"><i class="fa fa-trash-o fa-lg"></i></button>
+                    <button type="button" data-toggle="tooltip" title="Delete" onclick="del_msg()" class="btn btn-default btn-sm"><i class="fa fa-trash-o fa-lg"></i></button>
                     <?php } ?>
                     <button type="button" class="btn btn-primary btn-sm" name="newmessage" data-toggle="modal" data-target="#createconvo">Create New Message</button>
                   </div>
@@ -62,7 +63,7 @@ select { -webkit-appearance: none; -moz-appearance: none; text-indent: 1px; text
                         $c_id = $row['C_ID'];
                         ?>
                         <tr>
-                          <td align="center" scope="col" width="18"><input type="checkbox" id="record" name="Selector[]" value="<?php echo $row['C_ID']; ?>"></td>
+                          <td align="center" scope="col" width="18"><input type="checkbox" id="record" name="msg[]" value="<?php echo $row['C_ID']; ?>"></td>
                           <td><img class="img-circle img-sm" src="<?php echo $row['profile_pic']; ?>"> &nbsp;<a><?php echo $row['fname'].' '.$row['lname']; ?></a></td>
                           <td><div class="elipsis"><a href="conversation.php<?php echo '?rid='.$row['uid']."&&cid=".$row['C_ID']; ?>"><?php echo $row['reply']; ?></a></div></td>
                           <td width="170"><?php echo $row['date_time']; ?></td>
@@ -92,6 +93,14 @@ select { -webkit-appearance: none; -moz-appearance: none; text-indent: 1px; text
       $('#mes_example').dataTable({
         "oLanguage": { "sSearch": '<span class="glyphicon glyphicon-search form-control-feedback"></span>' }
       });
+
+      function del_msg()
+      {
+        if(confirm("Are you sure you want to delete the selected message/s?"))
+        {
+          $("#frmMsg").submit();
+        }
+      }
 
       $("#checkall").click(function()
       {
