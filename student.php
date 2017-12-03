@@ -14,10 +14,13 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-sm-7">
-						<div class="box box-primary">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<button type="button" data-toggle="modal" data-target="#import-student" class="btn btn-primary btn-sm">Import student</button>
+							</div>
 							<div class="box-body">
 								<form name="activeInactiveStudentForm" action="crud_function.php" method="post">
-									<table class="table table-bordered"> 
+									<table class="table table-bordered" id="example"> 
 										<thead> 
 											<tr>
 												<th>First Name</th> 
@@ -57,8 +60,8 @@
 
 
 													?>
-													<td><button type="button" style="margin:0px;" userid="<?php echo $row['id']; ?>" firstname="<?php echo $row['fname']; ?>" middlename="<?php echo $row['mname']; ?>" lastname="<?php echo $row['lname']; ?>" username="<?php echo $row['username']; ?>" contact="<?php echo $row['contact']; ?>" class="btn btn-success btn-sm"  onclick="edit(this)"> Edit</button>
-													<a data-toggle="tooltip" title="Add Student Parent" href="addstud_parent.php<?php echo '?id='. $row['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
+													<td><button type="button" style="margin:0px;" userid="<?php echo $row['id']; ?>" firstname="<?php echo $row['fname']; ?>" middlename="<?php echo $row['mname']; ?>" lastname="<?php echo $row['lname']; ?>" username="<?php echo $row['username']; ?>" contact="<?php echo $row['contact']; ?>" class="btn btn-success btn-sm" data-toggle="tooltip" title="Edit" onclick="edit(this)"> <i class="fa fa-edit"></i></button>
+														<a data-toggle="tooltip" data-placement="left" title="Add Student Parent" href="addstud_parent.php<?php echo '?id='. $row['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
 													</td> 
 												</tr> 
 												<?php } ?>
@@ -71,7 +74,7 @@
 						</div>
 
 						<div class="col-sm-5">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 									<h3 class="box-title"><i class="fa fa-plus-circle"> Add new student</i></h3>
 								</div>
@@ -87,15 +90,15 @@
 										</div>
 										<div class="form-group">
 											<label>Last Name</label>
-											<input type="text" class="form-control" name="txtLastname" id="txtLastname" required>
+											<input type="text" class="form-control" name="txtLastname" id="txtLastname">
 										</div>
 										<div class="form-group">
 											<label>Middle Name</label>
-											<input type="text" class="form-control" name="txtMiddlename" id="txtMiddlename" required>
+											<input type="text" class="form-control" name="txtMiddlename" id="txtMiddlename">
 										</div>
 										<div class="form-group">
 											<label>Contact</label>
-											<input type="text" class="form-control" name="txtContact" id="txtContact" required>
+											<input type="text" class="form-control" name="txtContact" id="txtContact">
 										</div>
 										<input type="hidden" id="id" name="id" value="">
 										<button type="submit" name="btnAddStudent" id="btnAddStudent" class="btn btn-primary">Add</button>

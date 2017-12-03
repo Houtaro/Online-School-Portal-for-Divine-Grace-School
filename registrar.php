@@ -14,11 +14,11 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-sm-7">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<div class="box-body">
 								<form name="activeInactiveRegistrar" method="post" action="crud_function.php">
 									<div class="tables">
-										<table class="table table-bordered"> 
+										<table class="table table-bordered" id="example"> 
 											<thead> 
 												<tr>
 													<th>First Name</th> 
@@ -72,7 +72,7 @@
 						</div>
 
 						<div class="col-sm-5">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 									<h3 class="box-title"><i class="fa fa-plus-circle"> Add new registrar</i></h3>
 								</div>

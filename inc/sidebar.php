@@ -27,7 +27,7 @@
 </a>
 <ul class="treeview-menu">
  <li><a href="school_year.php"> <span>School Year</span></a></li>
- <li><a href="year_level.php"> <span>Grade Level</span></a></li>
+ <li><a href="grade_level.php"> <span>Grade Level</span></a></li>
  <li><a href="curriculum.php"> <span>Curriculum</span></a></li>
  <li><a href="subject.php"> <span>Subject</span></a></li>
  <li><a href="class.php"> <span>Class</span></a></li>
@@ -54,17 +54,10 @@
 </ul>
 </li>
 <li class="treeview slesson" onclick="setmodule('Student Lesson')">
-  <a href="#">
+  <a href="reports.php">
    <i class="fa fa-file"></i>
    <span>Report</span>
-   <span class="pull-right-container">
-    <span class="fa fa-angle-left pull-right"></span>
-  </span>
 </a>
-<ul class="treeview-menu">
- <li><a href="student_class.php"> <span>Clearance</span></a></li>
- <li><a href="teacher_advisory.php"> <span>Grades</span></a></li>
-</ul>
 </li>
 <li class="treeview slesson" onclick="setmodule('Student Lesson')">
   <a href="#">

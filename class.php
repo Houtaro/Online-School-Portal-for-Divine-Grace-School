@@ -25,8 +25,7 @@
  												<tr>
  													<th><input type="checkbox" id="checkall"></th>
  													<th>Class Name</th> 
- 													<th>School Year</th> 
- 													<th>Year Level</th>
+ 													<th>Grade Level</th>
  													<th>Curriculum</th>
  													<th></th>
  												</tr> 
@@ -42,18 +41,6 @@
  													<tr> 
  														<td width="20"><input type="checkbox" id="record" name="classid[]" value="<?php echo $row['id']; ?>"></td>
  														<td><?php echo $row['classname']; ?></td> 
- 														<!-- load school year based on school year id -->
- 														<?php 
- 														$query2 = "SELECT schoolyear FROM tblschoolyear WHERE id = '" . $row['schoolyearid'] . "'";
- 														$result2 = mysqli_query($con, $query2);
- 														$schoolyear = "";
- 														while($rows = mysqli_fetch_array($result2))
- 														{
- 															$schoolyear = $rows['schoolyear'];
- 														}
- 														?>
- 														<td><?php echo $schoolyear; ?></td>
- 														<!-- load yearlevel based on year level id -->
  														<?php 
  														$query3 = "SELECT yearlevel FROM tblyearlevel WHERE id = '" . $row['yearlevelid'] . "'";
  														$result3 = mysqli_query($con, $query3);
@@ -67,10 +54,8 @@
  														<td><?php echo $yearlevel; ?></td>
  														<td>
  															<?php
-
  																$query4 = "SELECT * FROM curriculumtbl WHERE id = " . $row['cur_id'];
  																$result4 = mysqli_query($con, $query4);
-
  																$curname = "";
  																while($rows = mysqli_fetch_array($result4))
  																{
@@ -85,9 +70,7 @@
 	 															style="margin:0px;padding:8px;" 
 	 															cl-na="<?php echo $row['classname']; ?>" 
 	 															classid="<?php echo $row['id']; ?>" 
-	 															schoolyearid="<?php echo $row['schoolyearid']; ?>" 
-	 															yearlevelid="<?php echo $row['yearlevelid']; ?>"  
-	 															schoolyear="<?php echo $schoolyear; ?>" 
+	 															yearlevelid="<?php echo $row['yearlevelid']; ?>" 
 	 															yearlevel="<?php echo $yearlevel; ?>"
 	 															cur-id="<?php echo $row['cur_id']; ?>" 
 	 															onclick="edit(this)" 
@@ -115,29 +98,13 @@
  											<label>Class Name</label>
  											<input type="text" class="form-control" name="txtClassName" id="txtClassName" required>
  										</div>
- 										<div class="form-group">
- 											<label>School Year</label>
- 											<select class="form-control" style="height:44px;" name="cboSchoolYear" id="cboSchoolYear" required>
- 												<option></option>
- 												<?php 
- 												$query = "SELECT * FROM tblschoolyear";
- 												$result = mysqli_query($con, $query);
-
- 												while($row = mysqli_fetch_array($result))
- 												{
- 													?>
- 													<option><?php echo $row['schoolyear']; ?></option>
- 													<?php } ?>
- 												</select>
- 											</div>
  											<div class="form-group">
- 												<label>Year Level</label>
- 												<select class="form-control" style="height:44px;" name="cboYearLevel"  id="cboYearLevel" required>
+ 												<label>Grade Level</label>
+ 												<select class="form-control" name="cboYearLevel"  id="cboYearLevel" required>
  													<option></option>
  													<?php 
  													$query = "SELECT * FROM tblyearlevel";
  													$result = mysqli_query($con, $query);
-
  													while($row = mysqli_fetch_array($result)){
  														?>
  														<option><?php echo $row['yearlevel']; ?></option>
@@ -150,22 +117,17 @@
  													<select name="cboCurriculum" id="cboCurriculum" class="form-control">
  														<option></option>
  														<?php
-
  															$query = "SELECT * FROM curriculumtbl";
  															$result = mysqli_query($con, $query);
-
  															while($row = mysqli_fetch_array($result))
  															{
  																?>
  																<option value="<?php echo $row['id']; ?>"><?php echo $row['curname']; ?></option>
  																<?php
-
  															}
-
  														?>
  													</select>
  												</div>
-
  												<input type="hidden" name="schoolyearid" id="schoolyearid">
  												<input type="hidden" name="yearlevelid" id="yearlevelid">
  												<input type="hidden" name="classid" id="classid">
@@ -201,12 +163,9 @@
  					function edit(obj)
  					{
  						$("#txtClassName").val(obj.parentNode.parentNode.childNodes[3].innerHTML);
- 						$("#cboSchoolYear").val($(obj).attr("schoolyear"));
  						$("#cboYearLevel").val($(obj).attr("yearlevel"));
 
  						$("#classid").val($(obj).attr("classid"));
- 						$("#schoolyearid").val($(obj).attr("schoolyearid"));
- 						$("#yearlevelid").val($(obj).attr("yearlevelid"));
  						$("#cboCurriculum").val($(obj).attr("cur-id"));
  						$("#btnAddClass").hide();
  						$("#btn_back").show();

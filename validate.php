@@ -43,6 +43,7 @@ if(isset($_POST['btnSubmit']))
 			{
 				?> <script> alert("Invalid password and username."); window.location = "index.php"; </script><?php
 			}
+			$crud->insert("activity_log", array("userid", "madeby", "description", "datemade"), array($row['id'], $row['fname']." ".$row['lname'], "Login" ,date("M d, Y - h:i a")));
 		}else{
 			?> <script> alert("Invalid password and username."); window.location = "index.php"; </script><?php
 		}

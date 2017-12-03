@@ -3,6 +3,10 @@
 <head>
 	<title>Teacher Advisory - Online School Portal </title>
 	<?php include "inc/navbar.php"; ?>
+	<link rel="stylesheet" href="select2/select2.min.css">
+	<style type="text/css">
+	.select2-results__option[aria-selected=true] { display: none; }
+</style>
 </head>
 <body>
 	<body class="hold-transition fixed skin-green sidebar-mini">
@@ -17,15 +21,15 @@
 				<section class="content">
 					<div class="row">
 						<div class="col-sm-7">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-body">
 									<form id="submitclass" action="crud_function.php" method="post">
 										<?php 
-										$query = "SELECT tblteacheradvisory.id, usertbl.fname, usertbl.mname, usertbl.lname, tblclass.classname, tblsubjects.subjectname, tblsubjects.description, tblyearlevel.yearlevel FROM tblteacheradvisory 
-										left join usertbl on usertbl.id = tblteacheradvisory.teacherid
-										left join tblyearlevel on tblteacheradvisory.gradelvl = tblyearlevel.id 
-										left join tblsubjects on tblsubjects.id = tblteacheradvisory.subjectid
-										left join tblclass on tblclass.id = tblteacheradvisory.classid WHERE usertbl.usertype = 'teacher'";
+										$query = "SELECT *,ta.id as taid FROM tblteacheradvisory ta
+										left join usertbl on usertbl.id = ta.teacherid
+										left join tblyearlevel on ta.gradelvl = tblyearlevel.id 
+										left join curriculumtbl cur on ta.curiculumid = cur.id
+										left join tblclass on tblclass.id = ta.classid WHERE usertbl.usertype = 'teacher'";
 										$result = mysqli_query($con, $query)or die(mysqli_error($con));
 										if(mysqli_num_rows($result) > 0){
 											?>
@@ -39,19 +43,17 @@
 															<th>Teacher Name</th> 
 															<th>Grade Level</th>
 															<th>Class</th> 
-															<th>Subject</th>
 															<th></th>
 														</tr> 
 													</thead>
 													<tbody> 
-														<?php while($row = mysqli_fetch_array($result)) {  ?>
+														<?php while($row = mysqli_fetch_array($result)) { ?>
 														<tr> 
-															<th scope="row"><input type="checkbox" id="record" name="subid[]" value="<?php echo $row['id']; ?>"></th>
+															<th scope="row"><input type="checkbox" id="record" name="ta[]" value="<?php echo $row['taid']; ?>"></th>
 															<td><?php echo $row['fname']." ".$row['mname']." ".$row['lname']; ?></td>
 															<td><?php echo $row['yearlevel']; ?></td> 
 															<td><?php echo $row['classname']; ?></td> 
-															<td><?php echo $row['subjectname']." - ".$row['description']; ?></td>  
-															<td><button type="button" title="Edit" data-toggle="tooltip" onclick="editStudentClass(<?php echo $row['id']; ?>)" id="edit_studclass" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
+															<td><button type="button" title="Edit" data-toggle="tooltip" onclick="editStudentClass(<?php echo $row['taid']; ?>)" id="edit_studclass" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
 														</tr> 
 														<?php } ?>
 													</tbody> 
@@ -66,17 +68,21 @@
 							</div>
 
 							<div class="col-sm-5">
-								<div class="box box-primary">
+								<div class="box box-success">
 									<div class="box-header with-border">
-										<h3 class="box-title"><i class="fa fa-plus-circle"> Add Student Class</i></h3>
+										<h3 class="box-title"><i class="fa fa-plus-circle"> Add Teacher Advisory</i></h3>
 									</div>
 									<div class="box-body">
 										<form action="crud_function.php" method="post">
+											<?php
+											$sy = mysqli_query($con,"SELECT * FROM tblschoolyear where status='0'");
+											$rowsy = mysqli_fetch_array($sy);
+											?>
 											<input type="hidden" id="studclass_id" name="studclass_id">
 											<input type="hidden" name="txtschoolyear" value="<?php echo $rowsy['id']; ?>">
 											<div class="form-group">
 												<label>Curriculum Name:</label>
-												<select class="form-control" style="padding:8px;" name="cboclass"  id="cboclass" required>
+												<select class="form-control" style="padding:8px;" name="curid" onchange="getCurId(this)" id="curid" required>
 													<option selected disabled>--Select Curriculum--</option>
 													<?php 
 													$query = "SELECT * FROM curriculumtbl";
@@ -89,10 +95,10 @@
 												</div>
 												<div class="form-group">
 													<label>Grade Level:</label>
-													<select class="form-control" name="cboclass"  id="cboclass" required>
+													<select class="form-control" name="grdlvlid"  id="grdlvlid" onchange="generateClasses(this)" required>
 														<option selected disabled>--Select Grade Level--</option>
 														<?php 
-														$query = "SELECT * FROM tblyearlevel";
+														$query = "SELECT * FROM tblyearlevel order by yearlevel asc";
 														$result = mysqli_query($con, $query);
 														while($row = mysqli_fetch_array($result)){
 															?>
@@ -103,15 +109,15 @@
 
 													<div class="form-group">
 														<label>Class:</label>
-														<select class="form-control" name="cboclass"  id="cboclass" required></select>
+														<select class="form-control select_class" name="cboclass[]" id="cboclass" multiple required>
+															<option disabled>-- Select Class --</option>
+														</select>
 													</div>	
-
-													<div id="showsubject"> </div>
 
 													<div class="form-group">
 														<label>Teacher:</label>
 														<select class="form-control" style="padding:8px;"  name="cboempid" id="cboempid" required>
-															<option></option>
+															<option selected disabled>-- Select Teacher --</option>
 															<?php 
 															$query = "SELECT * FROM usertbl where usertype='teacher'";
 															$result = mysqli_query($con, $query);
@@ -125,6 +131,7 @@
 														<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
 														<button type="submit" id="btn_edit" style="display:none;" name="update_teacher_advisory" class="btn btn-success">Update</button>
 														<input type="hidden" name="teacher_advisory_id" id="teacher_advisory_id">
+														<input type="hidden" name="selectedCurriculum" id="selectedCurriculum">
 													</form>
 												</div>
 											</div>
@@ -135,9 +142,13 @@
 							<?php include "inc/sidebar.php"; ?>
 						</div>
 						<?php require "inc/script.php"; ?>
-						<script type="text/javascript">
+						<script src="select2/select2.full.min.js"></script>
+
+						<script>
+							$(".select_class").select2({ width: 416, maximumSelectionLength: 30 });
+
 							$("#del_emp_class").click(function(){
-								var conf = confirm("Are you sure you want to delete the selected student class?");
+								var conf = confirm("Are you sure you want to delete the selected teacher class?");
 								if(conf == true){
 									$("#submitclass").submit();
 								}
@@ -154,7 +165,8 @@
 							$("#btn_back").click(function(){
 								$("#cboempid").val("");
 								$("#cboclass").val("");
-								$("#cbosubjectid").val("");
+								$("#curid").val("");
+								$("#grdlvlid").val("");
 								$("#btn_back").hide();
 								$("#btn_edit").hide();
 								$("#add_empclass").show();
@@ -173,9 +185,65 @@
 									success: function(result)
 									{
 										var data = result.split(",");
-										$("#cboempid").val(data[0]);
-										$("#cboclass").val(data[1]);
-										$("#cbosubjectid").val(data[2]);
+										$("#curid").val(data[0]);
+										$("#grdlvlid").val(data[1]);
+										$("#cboclass").val(data[2]);
+										$("#cboempid").val(parseInt(data[3]));
+										loadClass($("#curid").val(), $("#grdlvlid").val(), parseInt(data[2]));
+									}
+								});
+							}
+
+							function getCurId(cbo)
+							{
+								$("#selectedCurriculum").val(cbo.value);
+							}
+
+							function loadClass(curid, gradeid, currentClass)
+							{
+								$.ajax({
+									url: 'crud_function.php',
+									type: 'post',
+									data:{ curid, gradeid, btnedit: '1' },
+									success: function(res)
+									{
+										var cboClass = $("#cboclass");
+										$(".gotclass").remove();
+										$.each(JSON.parse(res), function (index, datum) {
+											$("<option value='" + datum.id + "' class='gotclass'>").appendTo(cboClass).text(datum.classname);
+										});
+										$("#cboclass").val(currentClass);
+									}
+								})
+							}
+
+							function generateClasses(obj)
+							{
+								var gradelevelid = obj.value;
+								$.ajax({
+
+									url: 'generateClass.php',
+									type: 'post',
+									data:{
+										curid: $("#selectedCurriculum").val(),
+										gradeid: gradelevelid
+									},
+									success:function(result)
+									{
+										var cboClass = $("#cboclass");
+
+										$(".gotclass").remove();
+
+										if(result !== "no data")
+										{
+											$.each(JSON.parse(result), function (index, datum) {
+												$("<option value='" + datum.id + "' class='gotclass'>").appendTo(cboClass).text(datum.classname);
+											});
+										}
+										else
+										{
+											alert("No classes available in the selected curriculum and grade level.");
+										}
 									}
 								});
 							}

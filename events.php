@@ -14,7 +14,7 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-sm-7">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<form id="submit_announce" action="crud_function.php" method="post">
 								<div class="box-header with-border">
 									<button type="button" id="del_event" class="btn btn-danger">Delete</button>
@@ -54,7 +54,7 @@
 						</div>
 
 						<div class="col-sm-5">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 									<h3 class="box-title"><i class="fa fa-plus-circle"> Add Events</i></h3>
 								</div>
@@ -66,7 +66,7 @@
 										</div>
 										<div class="form-group">
 											<label>Description:</label>
-											<textarea name="txtdesc" class="form-control" id="description"></textarea>
+											<textarea name="txtdesc" class="form-control" id="description" required></textarea>
 										</div>
 										<div class="form-group">
 											<label>Image:</label>

@@ -18,7 +18,7 @@
 				?>
 				<div class="row">
 					<div class="col-md-8">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<div class="box-header with-border">
 								<?php if ($cnt > 0) { ?>
 									<button type="button" data-toggle="tooltip" title="Delete"  onclick="del_curriculum()" class="btn btn-danger">Delete</button>
@@ -57,7 +57,7 @@
 									</div>
 
 									<div class="col-md-4">
-										<div class="box box-primary">
+										<div class="box box-success">
 											<div class="box-header with-border">
 												<h3 class="box-title"><i class="fa fa-plus-circle"> Add curriculum</i></h3>
 											</div>

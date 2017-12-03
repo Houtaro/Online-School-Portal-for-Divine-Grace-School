@@ -14,11 +14,11 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-sm-7">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<div class="box-body">
 								<form name="activeInactiveTeacher" method="post" action="crud_function.php">
 									<div class="tables">
-										<table class="table table-bordered"> 
+										<table class="table table-bordered" id="example"> 
 											<thead> 
 												<tr>
 													<th>First Name</th> 
@@ -72,7 +72,7 @@
 						</div>
 
 						<div class="col-sm-5">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 									<h3 class="box-title"><i class="fa fa-plus-circle"> Add new teacher</i></h3>
 								</div>
@@ -92,11 +92,11 @@
 										</div>
 										<div class="form-group">
 											<label>Middle Name</label>
-											<input type="text" class="form-control" name="txtMiddlename" id="txtMiddlename" required>
+											<input type="text" class="form-control" name="txtMiddlename" id="txtMiddlename">
 										</div>
 										<div class="form-group">
 											<label>Contact</label>
-											<input type="text" class="form-control" name="txtContact" id="txtContact" required>
+											<input type="text" class="form-control" name="txtContact" id="txtContact">
 										</div>
 										<input type="hidden" id="id" name="id" value="">
 										<button type="submit" name="btnAddTeacher" id="btnAddTeacher" class="btn btn-primary">Add</button>

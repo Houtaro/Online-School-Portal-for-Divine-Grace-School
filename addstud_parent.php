@@ -23,7 +23,7 @@
 				?>
 				<div class="row">
 					<div class="col-sm-6">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<div class="box-header with-border">
 								<a href="student.php" class="btn btn-default btn-sm pull-right">Back</a>
 								<h3 class="box-title"><i class="fa fa-plus-circle"> Student Parent</i></h3>

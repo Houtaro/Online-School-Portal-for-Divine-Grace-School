@@ -15,7 +15,7 @@
 				<div class="row">
 					<form action="crud_function.php" method="post" name="del_slides" id="del_slides">
 						<div class="col-sm-7">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 									<button type="button" id="del_slide" class="btn btn-danger" onclick="del_slideshow()">Delete</button>
 								</div>
@@ -48,7 +48,7 @@
 							</form>
 
 							<div class="col-sm-5">
-								<div class="box box-primary">
+								<div class="box box-success">
 									<div class="box-header with-border">
 										<h3 class="box-title"><i class="fa fa-plus-circle"> Add Slide Show</i></h3>
 									</div>

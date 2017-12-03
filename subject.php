@@ -16,7 +16,7 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-sm-7">
-						<div class="box box-primary">
+						<div class="box box-success">
 							<div class="box-body">
 								<form id="submit_subject" action="crud_function.php" method="post">
 									<?php 
@@ -42,8 +42,6 @@
 													<?php while($row = mysqli_fetch_array($result)) { 
 														$yearlevel = mysqli_query($con,"SELECT * FROM tblyearlevel where id='".$row['yearlevelid']."'");
 														$row_ylevel = mysqli_fetch_array($yearlevel);
-
-
 														?>
 														<tr> 
 															<th scope="row"><input type="checkbox" id="record" name="subid[]" value="<?php echo $row['id']; ?>"></th>
@@ -64,7 +62,6 @@
 																?>
 															</td>
 															<td width="50">
-
 																<button 
 																	type="button" 
 																	id="editsub" 
@@ -73,9 +70,7 @@
 																	class="btn btn-success">
 																	Edit
 																</button>
-
 															</td> 
-
 														</tr> 
 														<?php } ?>
 													</tbody> 
@@ -90,7 +85,7 @@
 								</div>
 
 								<div class="col-sm-5">
-									<div class="box box-primary">
+									<div class="box box-success">
 										<div class="box-header with-border">
 											<h3 class="box-title"><i class="fa fa-plus-circle"> Add Subject</i></h3>
 										</div>
@@ -107,7 +102,7 @@
 												</div>
 												<div class="form-group">
 														<label>Curriculum</label>
-														<select class="form-control" id="cboCurriculum" style="height:44px;" name="cboCurriculum" required>
+														<select class="form-control" id="cboCurriculum" name="cboCurriculum" required>
 															<option></option>
 															<?php 
 															$query = "SELECT * FROM curriculumtbl";
@@ -120,13 +115,12 @@
 															</select>
 														</div>
 												<div class="form-group">
-													<label>Year Level</label>
-													<select class="form-control" id="cboYearLevel" style="height:44px;" name="cboYearLevel" required>
+													<label>Grade Level</label>
+													<select class="form-control" id="cboYearLevel" name="cboYearLevel" required>
 														<option></option>
 														<?php 
 														$query = "SELECT * FROM tblyearlevel";
 														$result = mysqli_query($con, $query);
-
 														while($row = mysqli_fetch_array($result)) {
 															?>
 															<option value="<?php echo $row['id']; ?>"><?php echo $row['yearlevel']; ?></option>

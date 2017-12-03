@@ -17,9 +17,9 @@
 				<div class="row">
 					<form name="active_inactive-form" method="post" action="crud_function.php">
 						<div class="col-sm-7">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-body">
-									<table class="table table-bordered"> 
+									<table class="table table-bordered table-striped"> 
 										<thead> 
 											<tr>
 												<th>School Year</th> 
@@ -58,7 +58,7 @@
 						</form>
 
 						<div class="col-sm-5">
-							<div class="box box-primary">
+							<div class="box box-success">
 								<div class="box-header with-border">
 								<h3 class="box-title"><i class="fa fa-plus-circle"> Add School Year</i></h3>
 								</div>
@@ -66,7 +66,7 @@
 									<form method="post" name="add_schoolyear_form" action="crud_function.php">
 										<div class="form-group">
 											<label>School Year</label>
-											<input type="text" class="form-control" name="txtSchoolYear" id="txtSchoolYear" placeholder="0000-0000">
+											<input type="text" class="form-control" name="txtSchoolYear" id="txtSchoolYear" placeholder="0000-0000" required>
 										</div>
 										<input type="hidden" name="school_year_id" id="school_year_id">
 										<button type="submit" name="btnAddSchoolYear" id="btnAddSchoolYear" class="btn btn-primary">Add</button>

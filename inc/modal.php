@@ -23,6 +23,36 @@
     </div>
   </div>
 
+  <!-- start import student -->
+  <div class="modal fade" id="import-student" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">
+            <i style=" font-size: 24px;" class="fa fa-plus-circle"> Import Students</i>
+          </h4>
+        </div>
+        <form id="import-student-form" action="crud_function.php" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="prog_id" value="<?php echo $get_id; ?>">
+          <input type="hidden" name="program" value="<?php echo $prog_name; ?>">
+          <div class="modal-body">
+            <div class="form-group">
+              <a style="font-size: 24px;" href="images/student_format.csv"><i class="fa fa-download"> Download format</i></a>
+            </div>
+            <label>
+            Import(.csv file only):</label>
+            <input type="file" name="import_stud" class="form-control" required>
+          </div>
+          <div class="box-footer">
+            <button type="submit" name="btn-import-stud" class="btn btn-primary pull-right">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end import student -->
+
   <div class="modal fade" id="changepicmodal" role="dialog">
     <div class="modal-dialog" style="width:30%;">
       <div class="modal-content">
