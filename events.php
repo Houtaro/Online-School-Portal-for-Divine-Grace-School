@@ -28,6 +28,7 @@
 												<th>Title</th> 
 												<th>Description</th> 
 												<th>Image</th>
+												<th>Event Start</th>
 												<th></th>
 											</tr> 
 										</thead>
@@ -43,7 +44,8 @@
 													<td><?php echo $row['title']; ?></td> 
 													<td><?php echo $row['descript']; ?></td> 
 													<td><img width="40" height="40" src="images/<?php echo $row['image']; ?>"></td>
-													<td><center><button type="button" aid="<?php echo $row['id']; ?>" atitle="<?php echo $row['title']; ?>" adescription="<?php echo $row['descript']; ?>" class="btn btn-success" onclick="edit(this)">Edit</button></center></td> 
+													<td><?php echo $row['datestart']; ?></td>
+													<td><center><button type="button" aid="<?php echo $row['id']; ?>" atitle="<?php echo $row['title']; ?>" adescription="<?php echo $row['descript']; ?>" datestart="<?php echo $row['datestart']; ?>" class="btn btn-success btn-sm" onclick="edit(this)"><i class="fa fa-edit"></i></button></center></td> 
 												</tr> 
 												<?php } ?>
 											</tbody> 
@@ -72,6 +74,15 @@
 											<label>Image:</label>
 											<input type="file" class="form-control" name="image" required>
 										</div>
+										<div class="form-group">
+											<label>Date of event:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" class="form-control pull-right datepicker" id="datestart" name="txtdatestart">
+											</div>
+										</div>
 										<input type="hidden" name="eventid" id="eventid">
 										<button type="submit" name="btnaddevent" id="btnaddevent" class="btn btn-primary">Add</button>
 										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
@@ -94,6 +105,9 @@
 					$("#submit_announce").submit();
 				}
 			})
+			$('.datepicker').datepicker({
+				autoclose: true
+			});
 			$("#checkall").click(function()
 			{
 				if ($("#checkall").is(':checked')) {
@@ -106,6 +120,7 @@
 			{
 				$("#txtttile").val($(obj).attr("atitle"));
 				$("#description").val($(obj).attr("adescription"));
+				$("#datestart").val($(obj).attr("datestart"));
 				$("#eventid").val($(obj).attr("aid"));
 				$("#btnaddevent").hide();
 				$("#btn_back").show();

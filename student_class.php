@@ -3,7 +3,6 @@
 <head>
 	<title>Enroll Student - Online School Portal</title>
 	<?php include "inc/navbar.php"; ?>
-	<link rel="stylesheet" href="select2/select2.min.css">
 </head>
 <body class="hold-transition fixed skin-green sidebar-mini">
 	<div class="wrapper">
@@ -21,9 +20,10 @@
 							<div class="box-body">
 								<form id="submit_studclass" action="crud_function.php" method="post">
 									<?php 
-									$query = "SELECT *,c.id as cid, st.id as stid,
+									$query = "SELECT *,c.id as cid, st.id as stid, s.description as sub_description,
 									sc.id as sid,CONCAT(st.lname, ', ', st.fname, ' ',st.mname) as sname from tblstudentclass sc 
 									left join tblclass c on sc.classid = c.id 
+									left join tblsubjects s on sc.subjectid = s.id
 									left join tblyearlevel g on sc.gradelevel = g.id 
 									left join usertbl st on sc.studentid = st.id";
 									$result = mysqli_query($con, $query)or die(mysqli_error($con));
@@ -32,13 +32,14 @@
 										<button type="button" id="del_stud_class" class="btn btn-danger">Delete</button>
 										<input type="hidden" name="del_studclass" value="1">
 										<div class="tables">
-											<table class="table table-bordered"> 
+											<table class="table table-bordered" id="example"> 
 												<thead> 
 													<tr>
 														<th><input type="checkbox" id="checkall"></th> 
 														<th>Student Name</th> 
 														<th>Grade Level</th>
 														<th>Class</th> 
+														<th>Subject</th>
 														<th></th>
 													</tr> 
 												</thead>
@@ -49,7 +50,7 @@
 														<td><?php echo $row['sname']; ?></td>
 														<td><?php echo $row['yearlevel']; ?></td> 
 														<td><?php echo $row['classname']; ?></td> 
-
+														<td><?php echo $row['subjectname']." - ".$row['sub_description']; ?></td>
 														<td><button type="button" data-toggle="tooltip" title="Edit" onclick="editStudentClass(<?php echo $row['sid']; ?>)" id="edit_studclass" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td> 
 													</tr> 
 													<?php } ?>
@@ -92,7 +93,7 @@
 											</div>
 											<div class="form-group">
 												<label>Grade Level:</label>
-												<select class="form-control" name="cbogradelevel"  id="cbogradelevel" onchange="generateClasses(this)" required>
+												<select class="form-control" name="cbogradelevel" id="cbogradelevel" onchange="generateClasses(this)" required>
 													<option selected disabled>--Select Grade Level--</option>
 													<?php 
 													$query = "SELECT * FROM tblyearlevel order by yearlevel asc";
@@ -103,6 +104,7 @@
 														<?php } ?>
 													</select>
 												</div>
+												
 												<div class="form-group">
 													<label>Class:</label>
 													<select class="form-control" name="cboclass"  id="cboclass" required>
@@ -166,8 +168,7 @@
 						<?php include "inc/sidebar.php"; ?>
 					</div>
 					<?php include "inc/script.php"; ?>
-					<script src="select2/select2.full.min.js"></script>
-					<script type="text/javascript">
+					<script>
 						$(".select_student").select2({ width: 416, maximumSelectionLength: 30 });
 
 						$("#del_stud_class").click(function(){
@@ -189,7 +190,8 @@
 						$("body").on("click", ".removestud", function(){
 							var stud =  $(this).data("id");
 							var studid =  $(this).data("studid");
-							alert(studid)
+							$("#cboStudent").append("<option value="+studid+" data-id="+stud+">"+stud+"</option>");
+							$(this).parent('li.con').remove();
 						})
 
 						$("#checkall").click(function()
@@ -219,6 +221,8 @@
 						});
 
 						$("#btn_back").click(function(){
+							$("#cbocurriculum").prop('disabled',false);
+							$("#cbogradelevel").prop('disabled',false);
 							$("#cboStudent").val("");
 							$("#cboclass").val("");
 							$("#cbocurriculum").val("");
@@ -232,6 +236,8 @@
 						function editStudentClass(id)
 						{
 							$("#stud_class_id").val(id);
+							$("#cbocurriculum").prop('disabled',true);
+							$("#cbogradelevel").prop('disabled',true);
 							$.ajax({
 								url: 'crud_function.php',
 								type: 'post',

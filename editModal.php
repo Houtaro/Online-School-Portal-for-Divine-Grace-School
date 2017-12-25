@@ -1,7 +1,7 @@
 <?php 
 include "conn.php";
 $id = $_POST['sgid'];
-$query = "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
+$query = "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, s.id as studid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
                             FROM tblstudentgrade sg
                             LEFT JOIN tblstudentclass sc ON sg.classid = sc.classid
                             AND sg.studentid = sc.studentid
@@ -14,10 +14,6 @@ $query = "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, CONCAT(t.lname
                             where sg.id='$id'";
 $result = mysqli_query($con, $query)or die(mysqli_error($con));
 $row = mysqli_fetch_array($result);
-
-$query = "SELECT * FROM tblschoolyear where status=0";
-$resultsy = mysqli_query($con, $query)or die(mysqli_error($con));
-$rowsy = mysqli_fetch_array($resultsy);
 ?>
 <form action="crud_function.php" method="post">
 <div class="modal-dialog">
@@ -28,7 +24,7 @@ $rowsy = mysqli_fetch_array($resultsy);
         </div>
         <div class="modal-body">
             <input type="hidden" value="<?php echo $row['sgid'] ?>" name="hidden_id" id="hidden_id"/>
-            <input type="hidden" value="<?php echo $rowsy['id']; ?>" name="txt_edit_sy" id="txt_edit_sy"/>
+            <input type="hidden" value="<?php echo $row['studid']; ?>" name="studid" />
             <input type="hidden" value="<?php echo $row['classid']; ?>" name="txt_edit_class" id="txt_edit_class"/>
             <input type="hidden" value="<?php echo $row['subid']; ?>" name="txt_edit_subj" id="txt_edit_subj"/>
             <div class="form-group">
@@ -36,24 +32,24 @@ $rowsy = mysqli_fetch_array($resultsy);
                 <input readonly name="txt_edit_stud" id="txt_edit_stud" class="form-control input-sm" type="text" value="<?php echo $row['sname'] ?>" />
             </div>
             <div class="form-group">
-                <label>Prelim: </label>
-                <input name="txtprelim" id="txtprelim" class="form-control input-sm" type="number" value="<?php echo $row['prelim']; ?>" />
+                <label>First Grading: </label>
+                <input name="txtprelim" min="0" id="txtprelim" class="form-control input-sm" type="number" value="<?php echo $row['prelim']; ?>" />
             </div>
             <div class="form-group">
-                <label>Midterm: </label>
-                <input name="txtmidterm" id="txtmidterm" class="form-control input-sm" type="number" value="<?php echo $row['midterm']; ?>" />
+                <label>Second Grading: </label>
+                <input name="txtmidterm" min="0" id="txtmidterm" class="form-control input-sm" type="number" value="<?php echo $row['midterm']; ?>" />
             </div>
             <div class="form-group">
-                <label>Pre Final: </label>
-                <input name="txtprefi" id="txtprefi" class="form-control input-sm" type="number" value="<?php echo $row['prefi']; ?>" />
+                <label>Third Grading: </label>
+                <input name="txtprefi" min="0" id="txtprefi" class="form-control input-sm" type="number" value="<?php echo $row['prefi']; ?>" />
             </div>
             <div class="form-group">
-                <label>Final: </label>
-                <input name="txtfinal" id="txtfinal" class="form-control input-sm" type="number" value="<?php echo $row['final']; ?>" />
+                <label>Fourth Grading: </label>
+                <input name="txtfinal" min="0" id="txtfinal" class="form-control input-sm" type="number" value="<?php echo $row['final']; ?>" />
             </div>
         </div>
         <div class="modal-footer">
-            <input type="button" class="btn btn-default btn-sm" data-dismiss="modal" value="Cancel"/>
+            <input type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal" value="Close"/>
             <input type="submit" class="btn btn-primary btn-sm" name="btn_update_studgrade" value="Save"/>
         </div>
     </div>

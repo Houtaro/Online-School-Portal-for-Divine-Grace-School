@@ -17,7 +17,13 @@
 						<div class="box box-success">
 							<div class="box-body">
 								<?php
-								$result = mysqli_query($con, "SELECT * FROM usertbl where usertype='student' order by lname asc")or die(mysqli_error($con));
+								$sy = mysqli_query($con, "SELECT * FROM tblschoolyear where status='0'")or die(mysqli_error($con));
+								$rowsy = mysqli_fetch_array($sy);
+								$schoolyearid = $rowsy['id'];
+
+								$result = mysqli_query($con, "SELECT *, s.id as studid FROM tblstudentclass sc
+									LEFT JOIN usertbl s ON sc.studentid = s.id
+									where sc.schoolyearid='$schoolyearid' group by studid")or die(mysqli_error($con));
 								if(mysqli_num_rows($result) > 0){
 									?>
 									<table class="table table-bordered" id="example"> 
@@ -34,7 +40,7 @@
 											<?php
 											$cnt = 0;
 											while($row = mysqli_fetch_array($result)) { 
-												$userid = $row['id']; 
+												$userid = $row['studid']; 
 												?>
 												<tr> 
 													<th class="text-center" width="40" scope="row"><?php echo $cnt = $cnt + 1; ?></th>

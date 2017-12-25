@@ -89,7 +89,7 @@
                   <?php  
                   $quser = mysqli_query($con, "SELECT * FROM usertbl where usertype='parent' or usertype='teacher' and id!='$sessionid'")or die(mysqli_error($con));
                   ?>
-                  <select name="txtreciever" id="recieverid" class="form-control" onchange="getcid()">
+                  <select name="txtreciever" id="recieverid" class="select_student" onchange="getcid()">
                     <option selected disabled>-- Select User --</option>
                     <?php while($rowus = mysqli_fetch_array($quser)){ ?>
                     <option value="<?php echo $rowus['id']; ?>"><?php echo $rowus['fname']." ".$rowus['lname']; ?></option>
@@ -122,7 +122,6 @@
          $result = mysqli_query($con, $query)or die(mysqli_error($con));
          $rowsy = mysqli_fetch_array($result);
          ?>
-         <input type="hidden" name="cboSchoolYear" id="cboSchoolYear" value="<?php echo $rowsy['id']; ?>">
          <input type="hidden" name="cboclass" id="cboclass" value="<?php echo $classid; ?>">
          <input type="hidden" name="cbosubjectid" id="cbosubjectid" value="<?php echo $subid; ?>">
          <div class="modal-body">
@@ -149,19 +148,16 @@
   </div>
   <form action="crud_function.php" method="post">
     <div class="modal-body">
-     <?php 
-     $query = "SELECT * FROM tblschoolyear where status=0";
-     $result = mysqli_query($con, $query)or die(mysqli_error($con));
-     $rowsy = mysqli_fetch_array($result);
-     ?>
-     <input type="hidden" name="cboSchoolYear" id="cboSchoolYear" value="<?php echo $rowsy['id']; ?>">
      <input type="hidden" name="cboclass" id="cboclass" value="<?php echo $classid; ?>">
      <input type="hidden" name="cbosubjectid" id="cbosubjectid" value="<?php echo $subid; ?>">
      <div class="form-group">
       <label>Student:</label>
-      <select class="form-control" style="padding:8px;" name="cbostudent"  id="cbostudent" onchange="show_subj()" required>
+      <select class="form-control student" name="cbostudent"  id="cbostudent" onchange="show_subj()" required>
         <?php 
-        $stud = mysqli_query($con,"SELECT *,s.id as studID from tblstudentclass sc left join usertbl s on sc.studentid = s.id where sc.classid = '$classid' and sc.subjectid = '$subid' group by sc.studentid");
+        $stud = mysqli_query($con,"SELECT *,s.id as studID from tblstudentclass sc 
+          left join usertbl s on sc.studentid = s.id 
+          where sc.classid = '$classid' and sc.subjectid = '$subid' group by sc.studentid")or die(mysqli_error($con));
+
         while($rowstud = mysqli_fetch_array($stud))
         {
           echo '<option value="'.$rowstud['studID'].'">'.$rowstud['lname'].', '.$rowstud['fname'].' '.$rowstud['mname'].'</option>';
@@ -184,7 +180,8 @@
 </div>
 
 <script>
-
+  $(".select_student").select2({ width: 380 });
+  $(".student").select2({ width: 570 });
   function getcid(){
     $.ajax({
       type : "POST",

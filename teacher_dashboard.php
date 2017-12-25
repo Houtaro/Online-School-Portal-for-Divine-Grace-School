@@ -6,7 +6,7 @@
 </head>
 <body class="hold-transition fixed skin-green layout-top-nav">
 	<div class="wrapper">
-		<?php if ($userType == "teacher") { include "inc/emp_navbar.php"; }else if ($userType == "registrar") { include "inc/registrar_navbar.php"; }else{ include "inc/parent_navbar.php"; } ?>
+		<?php if ($userType == "teacher") { include "inc/emp_navbar.php"; } else if ($userType == "registrar") { include "inc/registrar_navbar.php"; } ?>
 		<div class="content-wrapper">
 			<section class="content-header">
 				<h1> Dashboard - <small><?php if ($userType == "teacher") { echo "Teacher"; }else if ($userType == "registrar") { echo "Registrar"; }else if ($userType == "registrar") { echo "Parent"; } ?></small> </h1>
@@ -21,8 +21,18 @@
 								<h4 class="text-center"><?php echo $userType; ?></h4>
 								<center>
 									<button style="margin-bottom:8px;" class="btn btn-primary" data-toggle="modal" data-target="#changepicmodal">Change Profile Picture</button><br>
-									<button class="btn btn-success" data-toggle="modal" data-target="#changepassmodal">Change Password</button>
-								</center>
+								</center><br>
+								<form action="crud_function.php" method="post">
+									<div class="form-group">
+										<label>Middle Name:</label>
+										<input type="text" class="form-control" name="txtMiddlename" value="<?php echo $mname; ?>" placeholder="Middle Name">
+									</div>
+									<div class="form-group">
+										<label>Contact No.</label>
+										<input type="text" class="form-control" name="txtContact" value="<?php echo $contact; ?>" placeholder="Contact No.">
+									</div>
+									<button type="submit" name="btnsaveinfo" class="btn btn-primary">Save</button>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -35,7 +45,7 @@
 							<div class="box-body">
 								<form action="crud_function.php" method="post">
 									<div class="input-group">
-										<textarea name="txtpost" class="form-control" placeholder="What's on your mind, <?php echo $user_rows['fname']; ?>?"></textarea>
+										<textarea name="txtpost" class="form-control" placeholder="What's on your mind, <?php echo $user_rows['fname']; ?>?" required></textarea>
 										<span class="input-group-btn">
 											<button style="height:50px;" type="submit" name="btn_post" id="btn_post" class="btn btn-primary btn-flat">Post</button>
 										</span>
@@ -82,74 +92,84 @@
 									if(mysqli_num_rows($query) > 0){
 										?>
 										<ul class="products-list product-list-in-box">
-											<?php while ($rowa = mysqli_fetch_array($query)) { ?>
-											<li class="item">
-												<div class="product-img">
-													<img src="images/<?php echo $rowa['image']; ?>" alt="Product Image">
-												</div>
-												<div class="product-info">
-													<a class="product-title"><?php echo $rowa['title']; ?></a>
-													<span class="product-description">
-														<?php echo $rowa['description']; ?>"
-													</span>
-												</div>
-											</li>
-											<?php } ?>
-										</ul>
-										<?php }else { echo "<div class='alert alert-'>No announcement added.</div>"; } ?>
-									</div>
-									<div class="box-footer text-center">
-										<a href="all_announcement.php" class="uppercase">View All Announcements</a>
-									</div>
-								</div>
-
-								<div class="box box-success">
-									<div class="box-header with-border">
-										<h3 class="box-title"><img src="images/Calendar.png" width="24" height="24"> <b>Events</b></h3>
-									</div>
-									<div class="box-body">
-										<?php 
-										$query = mysqli_query($con, "SELECT * FROM event_tbl order by id desc limit 5")or die(mysqli_error($con));
-										if(mysqli_num_rows($query) > 0){
-											?>
-											<ul class="products-list product-list-in-box">
-												<?php while ($rowa = mysqli_fetch_array($query)) { ?>
-												<li class="item">
-													<div class="product-img">
-														<img src="images/<?php echo $rowa['image']; ?>" alt="Product Image">
-													</div>
-													<div class="product-info">
-														<a class="product-title"><?php echo $rowa['title']; ?></a>
-														<span class="product-description">
-															<?php echo $rowa['descript']; ?>
-														</span>
-														<small><?php echo $rowa['dateupload']; ?></small>
-													</div>
-												</li>
-												<?php } ?>
-											</ul>
-											<?php }else { echo "<div class='alert alert-'>No event added.</div>"; } ?>
+											<?php 
+											while ($rowa = mysqli_fetch_array($query)) { 
+												$id = $rowa['id'];
+												$q = mysqli_query($con, "SELECT * FROM announcement_privilege where announceid='$id'")or die(mysqli_error($con));
+												$cnt = mysqli_fetch_array($q);
+												if($cnt['user'] == $userType){
+													?>
+													<li class="item">
+														<div class="product-img">
+															<img src="images/<?php echo $rowa['image']; ?>" alt="Product Image">
+														</div>
+														<div class="product-info">
+															<a class="product-title"><?php echo $rowa['title']; ?></a>
+															<span class="product-description">
+																<?php echo $rowa['description']; ?>"
+															</span>
+														</div>
+													</li>
+													<?php } else { echo "<div class='alert alert-danger'>No announcement added.</div>"; } } ?>
+												</ul>
+												<?php }else { echo "<div class='alert alert-danger'>No announcement added.</div>"; } ?>
+											</div>
+											<div class="box-footer text-center">
+												<a href="all_announcement.php" class="uppercase">View All Announcements</a>
+											</div>
 										</div>
-										<div class="box-footer text-center">
-											<a href="all_events.php" class="uppercase">View All Events</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-					</div>
 
-				</div>
-				<?php include "inc/script.php"; ?>
-				<?php include "inc/modal.php"; ?>
-				<script>
-					function deletepost(id){
-						var conf = confirm("Are you sure you want to delete this post?");
-						if (conf == true) {
-							$("#postid").val(id);
-							$("#formpost").submit();
-						}
-					}
-				</script>
-			</body>
-			</html>
+										<div class="box box-success">
+											<div class="box-header with-border">
+												<h3 class="box-title"><img src="images/Calendar.png" width="24" height="24"> <b>Events</b></h3>
+											</div>
+											<div class="box-body">
+												<?php 
+												$query = mysqli_query($con, "SELECT * FROM event_tbl order by datestart desc limit 5")or die(mysqli_error($con));
+												if(mysqli_num_rows($query) > 0){
+													?>
+													<ul class="products-list product-list-in-box">
+														<?php
+														$pcdate = date("m/d/Y");
+														while ($rowa = mysqli_fetch_array($query)) { 
+															if($rowa['datestart'] >= $pcdate){
+																?>
+																<li class="item">
+																	<div class="product-img">
+																		<img src="images/<?php echo $rowa['image']; ?>" alt="Product Image">
+																	</div>
+																	<div class="product-info">
+																		<a class="product-title"><?php echo $rowa['title']; ?></a>
+																		<span class="product-description">
+																			<?php echo $rowa['descript']; ?>
+																		</span>
+																		<small><?php echo date("M d, Y", strtotime($rowa['datestart'])); ?></small>
+																	</div>
+																</li>
+																<?php } } ?>
+															</ul>
+															<?php }else { echo "<div class='alert alert-danger'>No event added.</div>"; } ?>
+														</div>
+														<div class="box-footer text-center">
+															<a href="all_events.php" class="uppercase">View All Events</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+
+								</div>
+								<?php include "inc/script.php"; ?>
+								<?php include "inc/modal.php"; ?>
+								<script>
+									function deletepost(id){
+										var conf = confirm("Are you sure you want to delete this post?");
+										if (conf == true) {
+											$("#postid").val(id);
+											$("#formpost").submit();
+										}
+									}
+								</script>
+							</body>
+							</html>

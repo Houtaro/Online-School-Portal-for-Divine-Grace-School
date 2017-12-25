@@ -32,7 +32,7 @@ if(isset($_POST['btnSubmit']))
 			else if($userType === "parent")
 			{
 				$_SESSION['username'] = $row['username'];
-				header("LOCATION: teacher_dashboard.php");
+				header("LOCATION: parent_dashboard.php");
 			}
 			else if($userType === "registrar")
 			{

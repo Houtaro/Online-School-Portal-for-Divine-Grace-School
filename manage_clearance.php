@@ -15,13 +15,18 @@
 			</section>
 			<section class="content">
 				<div class="row">
-					<form name="active_inactive-form" method="post" action="crud_function.php">
+					<form id="submit_yearlevel" method="post" action="crud_function.php">
 						<div class="col-sm-7">
 							<div class="box box-success">
+								<div class="box-header with-border">
+									<button type="button" id="del_clearance" class="btn btn-danger">Delete</button>
+								</div>
 								<div class="box-body">
+									<input type="hidden" name="del_clearance" value="1">
 									<table class="table table-bordered table-striped"> 
 										<thead> 
 											<tr>
+												<th><input type="checkbox" id="checkall"></th>
 												<th>Clearance Name</th> 
 												<th></th>
 											</tr> 
@@ -33,12 +38,12 @@
 											while($row = mysqli_fetch_array($result)) {
 												?>
 												<tr>
+													<td width="20"><input type="checkbox" id="record" name="clearanceid[]" value="<?php echo $row['id']; ?>"></td>
 													<td><?php echo $row['clearancename']; ?></td>
-													<td><center><button type="button" style="margin:0px;" schoolyearid="<?php echo $row['id']; ?>" schoolyear="<?php echo $row['schoolyear']; ?>" class="btn btn-success" onclick="edit(this)">Edit</button></center></td> 
+													<td width="40"><center><button type="button" style="margin:0px;" clearanceid="<?php echo $row['id']; ?>" clearance="<?php echo $row['clearancename']; ?>" class="btn btn-success" onclick="edit(this)">Edit</button></center></td> 
 												</tr> 
 												<?php } ?>
 											</tbody> 
-											<input type="hidden" id="schoolyear_id" name="schoolyear_id">
 										</table>
 									</div>
 								</div>
@@ -48,18 +53,18 @@
 						<div class="col-sm-5">
 							<div class="box box-success">
 								<div class="box-header with-border">
-								<h3 class="box-title"><i class="fa fa-plus-circle"> Add Clearance</i></h3>
+									<h3 class="box-title"><i class="fa fa-plus-circle"> Add Clearance</i></h3>
 								</div>
 								<div class="box-body">
-									<form method="post" name="add_schoolyear_form" action="crud_function.php">
+									<form method="post" action="crud_function.php">
 										<div class="form-group">
 											<label>Clearance</label>
-											<input type="text" class="form-control" name="txtSchoolYear" id="txtSchoolYear" required>
+											<input type="text" class="form-control" name="txtclearance" id="txtclearance" required>
 										</div>
-										<input type="hidden" name="school_year_id" id="school_year_id">
-										<button type="submit" name="btnAddSchoolYear" id="btnAddSchoolYear" class="btn btn-primary">Add</button>
+										<button type="submit" name="btnaddclearance" id="btnaddclearance" class="btn btn-primary">Add</button>
 										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Cancel</button>
-										<button type="submit" id="btn_edit" style="display:none;" name="btneditSchoolYear" class="btn btn-success">Update</button>
+										<button type="submit" id="btn_edit" style="display:none;" name="btneditclearance" class="btn btn-success">Update</button>
+										<input type="hidden" name="clearanceid" id="clearanceid">
 									</form>
 								</div>
 							</div>
@@ -73,29 +78,37 @@
 	<?php include "inc/script.php"; ?>
 
 	<script>
+		$("#del_clearance").click(function(){
+			var conf = confirm("Are you sure you want to delete the selected Clearance?");
+			if(conf == true){
+				$("#submit_yearlevel").submit();
+			}
+		})
+		$("#checkall").click(function()
+		{
+			if ($("#checkall").is(':checked')) {
+				$("input#record").prop("checked", true);
+			} else {
+				$("input#record").prop("checked", false);
+			}
+		})
+
 		function edit(obj)
 		{
-			$("#school_year_id").val($(obj).attr("schoolyearid"));
-			$("#txtSchoolYear").val($(obj).attr("schoolyear"));
-			$("#btnAddSchoolYear").hide();
+			$("#clearanceid").val($(obj).attr("clearanceid"));
+			$("#txtclearance").val($(obj).attr("clearance"));
+			$("#btnaddclearance").hide();
 			$("#btn_back").show();
 			$("#btn_edit").show();
 		}
 
 		$("#btn_back").click(function(){
-			$("#school_year_id").val("");
-			$("#txtSchoolYear").val("");
+			$("#clearanceid").val("");
+			$("#txtclearance").val("");
 			$("#btn_back").hide();
 			$("#btn_edit").hide();
-			$("#btnAddSchoolYear").show();
+			$("#btnaddclearance").show();
 		})
-
-
-		function activeInactive(obj)
-		{
-			$("#schoolyear_id").val($(obj).attr("schoolyearid"));
-			document.active_inactive-form.submit();
-		}
 	</script>
 
 </body>

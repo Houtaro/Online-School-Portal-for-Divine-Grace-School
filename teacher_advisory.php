@@ -25,11 +25,13 @@
 								<div class="box-body">
 									<form id="submitclass" action="crud_function.php" method="post">
 										<?php 
-										$query = "SELECT *,ta.id as taid FROM tblteacheradvisory ta
+										$query = "SELECT *,ta.id as taid, s.description as sub_description FROM tblteacheradvisory ta
 										left join usertbl on usertbl.id = ta.teacherid
 										left join tblyearlevel on ta.gradelvl = tblyearlevel.id 
 										left join curriculumtbl cur on ta.curiculumid = cur.id
-										left join tblclass on tblclass.id = ta.classid WHERE usertbl.usertype = 'teacher'";
+										left join tblclass on tblclass.id = ta.classid 
+										left join tblsubjects s on ta.subjectid = s.id
+										WHERE usertbl.usertype = 'teacher'";
 										$result = mysqli_query($con, $query)or die(mysqli_error($con));
 										if(mysqli_num_rows($result) > 0){
 											?>
@@ -43,6 +45,7 @@
 															<th>Teacher Name</th> 
 															<th>Grade Level</th>
 															<th>Class</th> 
+															<th>Subject</th>
 															<th></th>
 														</tr> 
 													</thead>
@@ -53,6 +56,7 @@
 															<td><?php echo $row['fname']." ".$row['mname']." ".$row['lname']; ?></td>
 															<td><?php echo $row['yearlevel']; ?></td> 
 															<td><?php echo $row['classname']; ?></td> 
+															<td><?php echo $row['subjectname']." - ".$row['sub_description']; ?></td>
 															<td><button type="button" title="Edit" data-toggle="tooltip" onclick="editStudentClass(<?php echo $row['taid']; ?>)" id="edit_studclass" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></button></td>
 														</tr> 
 														<?php } ?>
@@ -95,7 +99,7 @@
 												</div>
 												<div class="form-group">
 													<label>Grade Level:</label>
-													<select class="form-control" name="grdlvlid"  id="grdlvlid" onchange="generateClasses(this)" required>
+													<select class="form-control" name="grdlvlid"  id="grdlvlid" onchange="generateClasses(this); generateSubjects(this)" required>
 														<option selected disabled>--Select Grade Level--</option>
 														<?php 
 														$query = "SELECT * FROM tblyearlevel order by yearlevel asc";
@@ -108,8 +112,15 @@
 													</div>
 
 													<div class="form-group">
+														<label>Subject:</label>
+														<select class="form-control" name="cbosubject" id="cbosubject" required>
+															<option selected disabled>--Select Subject--</option>
+														</select>
+													</div>	
+
+													<div class="form-group">
 														<label>Class:</label>
-														<select class="form-control select_class" name="cboclass[]" id="cboclass" multiple required>
+														<select class="select_class" name="cboclass[]" id="cboclass" multiple required>
 															<option disabled>-- Select Class --</option>
 														</select>
 													</div>	
@@ -164,7 +175,8 @@
 
 							$("#btn_back").click(function(){
 								$("#cboempid").val("");
-								$("#cboclass").val("");
+								$(".select_class").val("");
+								$("#cbosubject").val("");
 								$("#curid").val("");
 								$("#grdlvlid").val("");
 								$("#btn_back").hide();
@@ -189,7 +201,9 @@
 										$("#grdlvlid").val(data[1]);
 										$("#cboclass").val(data[2]);
 										$("#cboempid").val(parseInt(data[3]));
+										$("#cbosubject").val(parseInt(data[4]));
 										loadClass($("#curid").val(), $("#grdlvlid").val(), parseInt(data[2]));
+										loadSubject($("#curid").val(), $("#grdlvlid").val(), parseInt(data[4]));
 									}
 								});
 							}
@@ -197,6 +211,24 @@
 							function getCurId(cbo)
 							{
 								$("#selectedCurriculum").val(cbo.value);
+							}
+
+							function loadSubject(curid, gradeid, curresubj)
+							{
+								$.ajax({
+									url: 'crud_function.php',
+									type: 'post',
+									data:{ curid, gradeid, getsubject: '1' },
+									success: function(res)
+									{
+										var cbosub = $("#cbosubject");
+										$(".gotsubjects").remove();
+										$.each(JSON.parse(res), function (index, datum) {
+											$("<option value='" + datum.id + "' class='gotsubjects'>").appendTo(cbosub).text(datum.subjectname+" - "+datum.description);
+										});
+										$("#cbosubject").val(curresubj);
+									}
+								})
 							}
 
 							function loadClass(curid, gradeid, currentClass)
@@ -215,6 +247,35 @@
 										$("#cboclass").val(currentClass);
 									}
 								})
+							}
+
+							function generateSubjects(obj)
+							{
+								var gradelevelid = obj.value;
+								$.ajax({
+									url: 'crud_function.php',
+									type: 'post',
+									data:{
+										getsubject: '1',
+										curid: $("#selectedCurriculum").val(),
+										gradeid: gradelevelid
+									},
+									success:function(result)
+									{
+										var cbosubject = $("#cbosubject");
+										$(".gotsubjects").remove();
+										if(result !== "no data")
+										{
+											$.each(JSON.parse(result), function (index, datum) {
+												$("<option value='" + datum.id + "' class='gotsubjects'>").appendTo(cbosubject).text(datum.subjectname+" - "+datum.description);
+											});
+										}
+										else
+										{
+											alert("No subject available in the selected curriculum and grade level.");
+										}
+									}
+								});
 							}
 
 							function generateClasses(obj)

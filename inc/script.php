@@ -8,7 +8,9 @@
 <script src="js/cbpFWTabs.js"></script>
 <script src="js/datatables/jquery.dataTables.js"></script>
 <script src="js/datatables/dataTables.bootstrap.js"></script>
+<script src="js/datepicker/bootstrap-datepicker.js"></script>
 <script src="js/app.js"></script>
+<script src="select2/select2.full.min.js"></script>
 <script>
 	$(document).ready(function(){
 		$('#example').dataTable({

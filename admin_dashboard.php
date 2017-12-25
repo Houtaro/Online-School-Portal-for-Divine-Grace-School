@@ -125,6 +125,23 @@
 							</div>
 						</div>
 					</div>
+
+					<?php 
+					$slide = "SELECT * from usertbl where usertype='parent'";
+					$rst_slide = mysqli_query($con,$slide);
+					$count = mysqli_num_rows($rst_slide);
+					?>
+					<div class="col-lg-3 col-xs-6">
+						<div class="small-box bg-fuchsia">
+							<div class="inner">
+								<h3><?php echo $count; ?></h3>
+								<p>Parents</p>
+							</div>
+							<div class="icon">
+								<i class="fa fa-user"></i>
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 		</div>

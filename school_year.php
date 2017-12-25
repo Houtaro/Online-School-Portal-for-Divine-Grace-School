@@ -66,7 +66,7 @@
 									<form method="post" name="add_schoolyear_form" action="crud_function.php">
 										<div class="form-group">
 											<label>School Year</label>
-											<input type="text" class="form-control" name="txtSchoolYear" id="txtSchoolYear" placeholder="0000-0000" required>
+											<input type="text" class="form-control" name="txtSchoolYear" id="txtSchoolYear" placeholder="0000" required>
 										</div>
 										<input type="hidden" name="school_year_id" id="school_year_id">
 										<button type="submit" name="btnAddSchoolYear" id="btnAddSchoolYear" class="btn btn-primary">Add</button>
@@ -87,8 +87,11 @@
 	<script>
 		function edit(obj)
 		{
+			var schoolyear = $(obj).attr("schoolyear").split('-');
+			var f = schoolyear[0];
+			var l = schoolyear[1];
 			$("#school_year_id").val($(obj).attr("schoolyearid"));
-			$("#txtSchoolYear").val($(obj).attr("schoolyear"));
+			$("#txtSchoolYear").val(f);
 			$("#btnAddSchoolYear").hide();
 			$("#btn_back").show();
 			$("#btn_edit").show();

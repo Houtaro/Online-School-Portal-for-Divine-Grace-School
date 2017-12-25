@@ -3,7 +3,11 @@
  	<nav class="navbar navbar-static-top">
  		<div class="container">
  			<div class="navbar-header">
- 				<a href="teacher_dashboard.php" class="navbar-brand"><span class="logo-lg"><b><img src="images/logo.png" width="34" height="32">Divine Grace School</b></span></a>
+ 				<?php
+				$q = mysqli_query($con, "SELECT * FROM logotbl limit 1");
+				$row = mysqli_fetch_array($q);
+				?>
+ 				<a href="teacher_dashboard.php" class="navbar-brand"><span class="logo-lg"><b><img src="images/<?php echo $row['logo']; ?>" width="34" height="32"> Divine Grace School</b></span></a>
  				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
  					<i class="fa fa-bars"></i>
  				</button>

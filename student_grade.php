@@ -4,7 +4,7 @@
   <title>Student Grades - Online School Portal </title>
   <?php include "inc/navbar.php"; ?>
   <style type="text/css">
-  tbody tr:nth-child(odd){
+/*  tbody tr:nth-child(odd){
     background-color: #5bc0de;
     border-color: #46b8da;
   }
@@ -13,8 +13,8 @@
   }
   tr:nth-child(even) {
     background-color: #fff;
-  }
-</style>
+    }*/
+  </style>
 </head>
 <body class="hold-transition fixed skin-green layout-top-nav">
   <div class="wrapper">
@@ -35,17 +35,20 @@
                 <button style="padding:6px;" type="button" name="add_studgrade" data-toggle="modal" data-target="#studentgrade" class="btn btn-primary">Add Student Grades</button>
                 <button style="padding:6px;" type="button" name="importgrade" data-toggle="modal" data-target="#importgrade" class="btn btn-warning">Import Student Grades</button>
                 <?php
-                $result = mysqli_query($con, "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
+                $sy = mysqli_query($con, "SELECT * FROM tblschoolyear where status='0'")or die(mysqli_error($con));
+                $rowsy = mysqli_fetch_array($sy);
+                $schoolyearid = $rowsy['id'];
+
+                $result = mysqli_query($con, "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname, s.id as studid
                   FROM tblstudentgrade sg
                   LEFT JOIN tblstudentclass sc ON sg.classid = sc.classid
-                  AND sg.studentid = sc.studentid
-                  AND sg.subjectid = sc.subjectid
                   LEFT JOIN usertbl s ON sg.studentid = s.id
                   LEFT JOIN tblteacheradvisory ta ON sg.classid = ta.classid
                   LEFT JOIN usertbl t ON sg.adviserid = t.id
                   LEFT JOIN tblclass c ON sg.classid = c.id
                   LEFT JOIN tblsubjects sb on sg.subjectid = sb.id
-                  where sg.adviserid = '".$sessionid."' and sg.subjectid='".$subid."' and sg.classid='".$classid."' group by sgid")or die(mysqli_error($con));
+                  where sg.adviserid = '$sessionid' and sg.classid='$classid' and sg.subjectid='$subid' and ta.schoolyearid='$schoolyearid' group by sgid")or die(mysqli_error($con));
+                
                 if(mysqli_num_rows($result) > 0){
                   ?>
                   <input type="hidden" name="cboclass" value="<?php echo $classid; ?>">
@@ -53,7 +56,7 @@
                   <button style="padding:6px;" type="button" data-toggle="modal" data-target="#del_studgrade" class="btn btn-danger">Delete</button>
                   <a style="padding:6px;" href="print.php<?php echo '?subid='.$subid.'&classid='.$classid; ?>" class="btn btn-info">Print Grades</a>
                   <hr style="margin-top:4px;">
-                  <table class="table table-bordered" id="example"> 
+                  <table class="table table-bordered table-striped" id="example"> 
                    <thead> 
                     <tr>
                       <th><input type="checkbox" name="id" id="checkall"></th> 
@@ -64,7 +67,6 @@
                       <th>Fourth Grading</th>
                       <th>Final Grade</th>
                       <th>Remarks</th>
-                      <th>Adviser</th>
                       <th></th>
                     </tr> 
                   </thead>
@@ -75,14 +77,15 @@
                      <tr> 
                       <th class="text-center" scope="row"><input type="checkbox" id="record" name="sgid[]" value="<?php echo $row['sgid']; ?>"></th>
                       <td><?php echo $row['sname']; ?></td> 
-                      <td><?php echo $row['prelim']; ?></td> 
-                      <td><?php echo $row['midterm']; ?></td> 
-                      <td><?php echo $row['prefi']; ?></td> 
-                      <td><?php echo $row['final']; ?></td> 
-                      <td><?php echo $row['gradeaverage']; ?></td> 
+                      <td class="text-center"><?php if($row['prelim'] == null){ echo "-"; }else{ echo $row['prelim']; } ?></td> 
+                      <td class="text-center"><?php if($row['midterm'] == null){ echo "-"; }else{ echo $row['midterm']; } ?></td> 
+                      <td class="text-center"><?php if($row['prefi'] == null){ echo "-"; }else{ echo $row['prefi']; } ?></td> 
+                      <td class="text-center"><?php if($row['final'] == null){ echo "-"; }else{ echo $row['final']; } ?></td> 
+                      <td class="text-center"><?php echo $row['gradeaverage']; ?></td> 
                       <td><?php echo ($row['remarks'] == "Passed" ? "<label style='color:green'>".$row['remarks']."</label>" : (($row['remarks'] == "Failed") ? "<label style='color:red'>".$row['remarks']."</label>" : "<label style='color:black'>No Final Remarks</label>")); ?></td> 
-                      <td><?php echo $row['tname']; ?></td> 
-                      <td width="40"><button type="button" class="btn btn-success btn-sm" onclick="editgrade('<?php echo $row['sgid']; ?>')" data-target="<?php echo $row['sgid'] ?>" data-toggle="modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+                      <td width="100" class="text-center"><button type="button" data-toggle="tooltip" title="Edit Grades" class="btn btn-success btn-sm" onclick="editgrade('<?php echo $row['sgid']; ?>')" data-target="<?php echo $row['sgid'] ?>" data-toggle="modal"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></button>
+                        <a data-toggle="tooltip" title="Print Grades" href="print_grades.php<?php echo '?studid='.$row['studid']; ?>" class="btn btn-info btn-sm"><i class="fa fa-print fa-lg"></i></a>
+                      </td>
                     </tr> 
                     <?php  } ?>
                   </tbody> 

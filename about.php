@@ -26,9 +26,14 @@
         <div class="mbr-table">
           <div class="mbr-table-cell">
             <div class="navbar-brand">
-              <a href="https://mobirise.com" class="navbar-logo"><img src="assets/images/logo-128x128.png" alt="Mobirise"></a>
+              <?php
+              include "conn.php";
+              $q = mysqli_query($con, "SELECT * FROM logotbl limit 1");
+              $row = mysqli_fetch_array($q);
+              ?>
+              <a href="https://mobirise.com" class="navbar-logo"><img src="images/<?php echo $row['logo']; ?>" alt="Mobirise"></a>
               <a class="navbar-caption" href="index.php" style="color:#fff;"> Divine Grace School Portal</a>
-             </div>
+            </div>
           </div>
           <div class="mbr-table-cell">
             <button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
@@ -51,73 +56,76 @@
 
   <section class="engine"><a href="https://mobirise.co">Mobirise</a></section><section class="mbr-section mbr-after-navbar" id="testimonials2-1" data-rv-view="2" style="background-color: rgb(255, 255, 255); padding-top: 120px; padding-bottom: 80px;">
 
-  <div class="mbr-section mbr-section__container mbr-section__container--middle">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 text-xs-center">
-          <h3 class="mbr-section-title display-2">About Us</h3>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="mbr-section mbr-section-nopadding">
-    <div class="container">
-      <div class="row">
-
-        <div class="col-xs-12">
-
-          <div class="mbr-testimonial card">
-            <div class="card-block">Our mission is to provide a strong foundation for the students to be prepared on facing the increasing challenges of the brought about by the information age and global competitiveness.</div>
-            <div class="mbr-author card-footer">
-
-              <div class="mbr-author-name">Mission</div>
-
-            </div>
-          </div><div class="mbr-testimonial card">
-          <div class="card-block">DGS envisions a community of academically competent and value-laden individuals living a life commited to serve the Filipino society and contribute to the world community.</div>
-          <div class="mbr-author card-footer">
-
-            <div class="mbr-author-name">Vision</div>
+    <div class="mbr-section mbr-section__container mbr-section__container--middle">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 text-xs-center">
+            <h3 class="mbr-section-title display-2">About Us</h3>
 
           </div>
-        </div><div class="mbr-testimonial card">
-        <div class="card-block">To be partners with parents in nurturing and developing the students to become productive individuals by building strong foundation and appropriate values formation.</div>
-        <div class="mbr-author card-footer">
+        </div>
+      </div>
+    </div>
 
-          <div class="mbr-author-name">Goals</div>
+
+    <div class="mbr-section mbr-section-nopadding">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-xs-12">
+
+            <div class="mbr-testimonial card">
+              <div class="card-block">
+                <?php
+                $q = mysqli_query($con, "SELECT * FROM aboutus limit 1");
+                $row = mysqli_fetch_array($q);
+                echo $row['mission'];
+                ?></div>
+                <div class="mbr-author card-footer">
+
+                  <div class="mbr-author-name">Mission</div>
+
+                </div>
+              </div><div class="mbr-testimonial card">
+                <div class="card-block"><?php echo $row['vision']; ?></div>
+                <div class="mbr-author card-footer">
+
+                  <div class="mbr-author-name">Vision</div>
+
+                </div>
+              </div><div class="mbr-testimonial card">
+                <div class="card-block"><?php echo $row['goal']; ?></div>
+                <div class="mbr-author card-footer">
+                  <div class="mbr-author-name">Goals</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
       </div>
+    </section>
 
-    </div>
+    <footer class="mbr-small-footer mbr-section mbr-section-nopadding" id="footer1-2" data-rv-view="12" style="background-color: rgb(50, 50, 50); padding-top: 1.75rem; padding-bottom: 1.75rem;">
+      <div class="container text-xs-center">
+        <p>Copyright © 2018 Online School Portal.</p>
+      </div>
+    </footer>
 
-  </div>
+    <?php include "loginmodal.php"; ?>
 
-</div>
-</div>
-</section>
-
-<footer class="mbr-small-footer mbr-section mbr-section-nopadding" id="footer1-2" data-rv-view="12" style="background-color: rgb(50, 50, 50); padding-top: 1.75rem; padding-bottom: 1.75rem;">
-  <div class="container text-xs-center">
-    <p>Copyright © 2018 Online School Portal.</p>
-  </div>
-</footer>
-
-<?php include "loginmodal.php"; ?>
-
-<script src="assets/web/assets/jquery/jquery.min.js"></script>
-<script src="assets/tether/tether.min.js"></script>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/smooth-scroll/smooth-scroll.js"></script>
-<script src="assets/viewport-checker/jquery.viewportchecker.js"></script>
-<script src="assets/dropdown/js/script.min.js"></script>
-<script src="assets/touch-swipe/jquery.touch-swipe.min.js"></script>
-<script src="assets/theme/js/script.js"></script>
+    <script src="assets/web/assets/jquery/jquery.min.js"></script>
+    <script src="assets/tether/tether.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/smooth-scroll/smooth-scroll.js"></script>
+    <script src="assets/viewport-checker/jquery.viewportchecker.js"></script>
+    <script src="assets/dropdown/js/script.min.js"></script>
+    <script src="assets/touch-swipe/jquery.touch-swipe.min.js"></script>
+    <script src="assets/theme/js/script.js"></script>
 
 
-<input name="animation" type="hidden">
-</body>
-</html>
+    <input name="animation" type="hidden">
+  </body>
+  </html>

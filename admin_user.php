@@ -108,22 +108,24 @@
 										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="8"> Registrar</label>
 										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="9"> Teacher</label>
 										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="10"> Student</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="11"> Announcement</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="12"> Events</label>
-										<label><input type="checkbox" name="accessrights[]" value="13"> Slide Show</label>
+										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="11"> Parent</label>
+										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="12"> Clearance</label>
+										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="13"> Announcement</label>
+										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="14"> Events</label>
+										<label><input type="checkbox" name="accessrights[]" value="15"> Slide Show</label>
 										<br>
 										<label style="margin-top: 14px;">Transaction:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="14"> Enroll Student</label>
-										<label><input type="checkbox" name="accessrights[]" value="15"> Teacher Advisory</label>
+										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="16"> Enroll Student</label>
+										<label><input type="checkbox" name="accessrights[]" value="17"> Teacher Advisory</label>
 										<br>
 										<label style="margin-top: 14px;">Reports:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label><input type="checkbox" name="accessrights[]" value="16"> Clearance and Grades Reports</label>
+										<label><input type="checkbox" name="accessrights[]" value="18"> Clearance and Grades Reports</label>
 										<br>
 										<label style="margin-top: 14px;">Utilities:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label><input type="checkbox" name="accessrights[]" value="17"> Activity Log</label>
+										<label><input type="checkbox" name="accessrights[]" value="19"> Activity Log</label>
 
 										<br><br>
 										<input type="hidden" id="adminid" name="adminid" value="">

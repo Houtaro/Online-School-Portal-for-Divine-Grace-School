@@ -12,7 +12,8 @@
  <link rel="stylesheet" href="themes/dark/dark.css" type="text/css" media="screen" />
  <link rel="stylesheet" href="themes/bar/bar.css" type="text/css" media="screen" />
  <link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" /> 
-
+ <link rel="stylesheet" href="js/datepicker/datepicker3.css" type="text/css" media="screen" /> 
+ <link rel="stylesheet" href="select2/select2.css" type="text/css" media="screen" />
  <style type="text/css">
  .dataTables_filter { position: absolute; right: 16px; top: 0px; }
 </style>

@@ -74,6 +74,12 @@
 											<label>Image:</label>
 											<input type="file" class="form-control" name="image" required>
 										</div>
+										<label><input type="checkbox" id="checkalluser"> Check All</label>
+										<hr style="margin-top: 4px;">
+										<label style="margin-right: 20px;"><input type="checkbox" id="users" name="users[]" value="student"> Student</label>
+										<label style="margin-right: 20px;"><input type="checkbox" id="users" name="users[]" value="teacher"> Teacher</label>
+										<label><input type="checkbox" id="users" name="users[]" value="parent"> Parent</label>
+										<br><br>
 										<input type="hidden" name="announceid" id="announceid">
 										<button type="submit" name="btnaddannounce" id="btnaddannounce" class="btn btn-primary">Add</button>
 										<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
@@ -100,6 +106,15 @@
 						$("input#record").prop("checked", true);
 					} else {
 						$("input#record").prop("checked", false);
+					}
+				})
+
+				$("#checkalluser").click(function()
+				{
+					if ($("#checkalluser").is(':checked')) {
+						$("input#users").prop("checked", true);
+					} else {
+						$("input#users").prop("checked", false);
 					}
 				})
 				function edit(obj)

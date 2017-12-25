@@ -80,15 +80,15 @@
 									<form action="crud_function.php" method="post">
 										<div class="form-group">
 											<label>Username</label>
-											<input type="text" class="form-control" name="txtUsername" id="txtUsername" required>
+											<input type="text" class="form-control" name="txtUsername" id="txtUsername" readonly required>
 										</div>
 										<div class="form-group">
 											<label>First Name</label>
-											<input type="text" class="form-control" name="txtFirstname" id="txtFirstname" required>
+											<input type="text" class="form-control" name="txtFirstname" id="txtFirstname" onkeyup="getfname3()" required>
 										</div>
 										<div class="form-group">
 											<label>Last Name</label>
-											<input type="text" class="form-control" name="txtLastname" id="txtLastname" required>
+											<input type="text" class="form-control" name="txtLastname" id="txtLastname" onkeyup="getlname3()" required>
 										</div>
 										<div class="form-group">
 											<label>Middle Name</label>
@@ -158,7 +158,18 @@
 				document.activeInactiveTeacher.submit();
 			}
 
+			var fname_3 = null;
+			var lname_3 = null;
+			function getfname3(){
+				fname_3 = $('#txtFirstname').val().substring(0, 3);
+				$("#txtUsername").val(fname_3);
+			}
 
+			function getlname3(){
+				lname_3 = $('#txtLastname').val().substring($('#txtLastname').val().length -3);
+				var random = 1 + Math.floor(Math.random() * 6);
+				$("#txtUsername").val(fname_3+lname_3+random);
+			}
 		</script>
 
 	</body>

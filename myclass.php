@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Student Grades - Online School Portal </title>
+  <title>Your Class - Online School Portal </title>
   <?php include "inc/navbar.php"; ?>
   <style type="text/css">
     tbody tr:nth-child(odd){
@@ -21,7 +21,7 @@
     <?php include "inc/emp_navbar.php"; ?>
     <div class="content-wrapper">
       <section class="content-header">
-        <h1>Student Grades</h1>
+        <h1>Your Class</h1>
       </section>
       <section class="content">
         <div class="box box-success">

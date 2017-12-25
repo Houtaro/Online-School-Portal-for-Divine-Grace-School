@@ -2,6 +2,127 @@
 require "conn.php";
 include "session.php";
 
+if(isset($_POST['updatelogo']))
+{
+	$logo = $_FILES['image']['name'];
+	move_uploaded_file($_FILES['image']['tmp_name'], "images/" . $logo);
+	$id = validate($_POST['id']);
+	$crud->update("logotbl", array("id","logo"), array($id,$logo));
+	echo "<script>alert('Logo saved.');</script>";
+	echo "<script>(function(){ window.location.href='content.php'; })()</script>";
+}
+
+if(isset($_POST['btnlinks']))
+{
+	$link = validate($_POST['txtlink']);
+
+	$select = mysqli_query($con, "SELECT * FROM links where link='$link'");
+	if(mysqli_num_rows($select) > 0){
+		?> <script> alert('Link Already Exist.'); window.location.href='content.php';</script> <?php
+	}else{
+		$crud->insert("links", array("link"), array($link));
+		echo "<script>alert('Link added.');</script>";
+		echo "<script>(function(){ window.location.href='content.php'; })()</script>";
+	}
+}
+
+if(isset($_POST['updatecontactus']))
+{
+	$email = validate($_POST['txtemail']);
+	$telephone = validate($_POST['txttel']);
+	$phone = validate($_POST['txtphone']);
+	$address = validate($_POST['txtaddress']);
+	$id = validate($_POST['id']);
+	$crud->update("contactus", array("id","email","telephone","phone","address"), array($id,$email,$telephone,$phone,$address));
+	echo "<script>alert('Contact Us saved.');</script>";
+	echo "<script>(function(){ window.location.href='content.php'; })()</script>";
+}
+
+if(isset($_POST['updateaboutus']))
+{
+	$mission = validate($_POST['txtmission']);
+	$vision = validate($_POST['txtvision']);
+	$goal = validate($_POST['txtgoal']);
+	$id = validate($_POST['aboutid']);
+	$crud->update("aboutus", array("id","mission","vision","goal"), array($id,$mission,$vision,$goal));
+	echo "<script>alert('About Us saved.');</script>";
+	echo "<script>(function(){ window.location.href='content.php'; })()</script>";
+}
+
+if(isset($_POST['getsubject']))
+{
+	$cur_id = $_POST['curid'];
+	$gradeid = $_POST['gradeid'];
+
+	$query = "SELECT * FROM tblsubjects WHERE cur_id = " . $cur_id . " AND yearlevelid = " . $gradeid;
+	$result = mysqli_query($con, $query);
+
+	if(mysqli_num_rows($result) > 0)
+	{
+		while($row = mysqli_fetch_array($result))
+		{
+			$data[] = $row;
+		} 
+		print json_encode($data);
+	}
+	else
+	{
+		echo "no data";
+	}
+}
+
+if(isset($_POST['btnsaveinfo'])){
+	$mname = validate($_POST['txtMiddlename']);
+	$con_no = validate($_POST['txtContact']);
+	$crud->update("usertbl", array("id", "mname", "contact"), array($sessionid, $mname, $con_no));
+	?>
+	<script> alert('Successfully updated.'); 
+	window.location.href='<?php if($userType == "student"){ echo 'student_dashboard.php'; }
+	else if($userType == "teacher"){ echo 'teacher_dashboard.php'; }else if($userType == "registrar"){ echo 'teacher_dashboard.php'; }
+	else if($userType == "parent"){ echo 'parent_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
+	<?php
+}
+
+if(isset($_POST['btnaddclearance']))
+{
+	$clearance = validate($_POST['txtclearance']);
+	$select = mysqli_query($con, "SELECT * FROM clearancetbl where clearancename='$clearance'");
+	if(mysqli_num_rows($select) > 0){
+		?> <script> alert('Clearance Already Exist.'); window.location.href='manage_clearance.php';</script> <?php
+	}else{
+		$crud->insert("clearancetbl", array("clearancename"), array($clearance));
+		header("location:manage_clearance.php");
+	}
+}
+
+if(isset($_POST['btneditclearance']))
+{
+	$id = validate($_POST['clearanceid']);
+	$clearance = validate($_POST['txtclearance']);
+	$crud->update("clearancetbl", array("id","clearancename"), array($id, $clearance));
+	header("location:manage_clearance.php");
+}
+
+if(isset($_POST['del_clearance']))
+{
+	if (!empty($_POST['clearanceid'])) 
+	{
+		$clearanceid = $_POST['clearanceid'];
+		$N = count($clearanceid);
+		for($i=0; $i < $N; $i++)
+		{
+			mysqli_query($con, "DELETE from clearancetbl where id = '$clearanceid[$i]'")or die(mysqli_error($con));
+		}
+		echo "<script>alert('Clearance deleted.');</script>";
+		echo "<script>(function(){ window.location.href='manage_clearance.php'; })()</script>";
+	}
+	else
+	{
+		echo "<script>alert('Please select clearance you want to delete, Thank you!');</script>";
+		echo "<script>(function(){ window.location.href='manage_clearance.php'; })()</script>";
+	}
+}
+
 if (isset($_POST['get_cid'])) 
 {
 	$recieverid = $_POST['recieverid'];
@@ -80,7 +201,7 @@ if (isset($_POST['btnchangepass']))
 	<script> alert('Successfully updated.'); 
 	window.location.href='<?php if($userType == "student"){ echo 'student_dashboard.php'; }
 	else if($userType == "teacher"){ echo 'teacher_dashboard.php'; }else if($userType == "registrar"){ echo 'teacher_dashboard.php'; }
-	else if($userType == "parent"){ echo 'teacher_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
+	else if($userType == "parent"){ echo 'parent_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
 	<?php
 }
 
@@ -93,7 +214,7 @@ if (isset($_POST['btnchangepic']))
 	<script> alert('Successfully updated.'); 
 	window.location.href='<?php if($userType == "student"){ echo 'student_dashboard.php'; }
 	else if($userType == "teacher"){ echo 'teacher_dashboard.php'; }else if($userType == "registrar"){ echo 'teacher_dashboard.php'; }
-	else if($userType == "parent"){ echo 'teacher_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
+	else if($userType == "parent"){ echo 'parent_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
 	<?php
 }
 
@@ -105,7 +226,7 @@ if(isset($_POST['btn_post']))
 	?>
 	<script> window.location.href='<?php if($userType == "student"){ echo 'student_dashboard.php'; }
 	else if($userType == "teacher"){ echo 'teacher_dashboard.php'; }else if($userType == "registrar"){ echo 'teacher_dashboard.php'; }
-	else if($userType == "parent"){ echo 'teacher_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
+	else if($userType == "parent"){ echo 'parent_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
 	<?php
 }
 
@@ -116,7 +237,7 @@ if(isset($_POST['delpost']))
 	?>
 	<script> alert("Successfully deleted."); window.location.href='<?php if($userType == "student"){ echo 'student_dashboard.php'; }
 	else if($userType == "teacher"){ echo 'teacher_dashboard.php'; }else if($userType == "registrar"){ echo 'teacher_dashboard.php'; }
-	else if($userType == "parent"){ echo 'teacher_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
+	else if($userType == "parent"){ echo 'parent_dashboard.php'; }else { echo 'admin_dashboard.php'; } ?>'; </script>
 	<?php
 }
 
@@ -157,7 +278,8 @@ if (isset($_POST['btnsendmessage']))
 
 if(isset($_POST['btnAddSchoolYear']))
 {
-	$school_year = validate($_POST['txtSchoolYear']);
+	$sy = validate($_POST['txtSchoolYear']);
+	$school_year = $sy."-".($sy+1);
 	$select = mysqli_query($con, "SELECT * FROM tblschoolyear where schoolyear='$school_year'");
 	if(mysqli_num_rows($select) > 0){
 		?> <script> alert('School Year Already Exist.'); window.location.href='school_year.php';</script> <?php
@@ -171,10 +293,16 @@ if(isset($_POST['btnAddSchoolYear']))
 if(isset($_POST['btneditSchoolYear']))
 {
 	$id = $_POST['school_year_id'];
-	$school_year = validate($_POST['txtSchoolYear']);
-	$crud->update("tblschoolyear", array("id", "schoolyear"), array($id, $school_year));
-	echo "<script>alert('Successfully updated.');</script>";
-	echo "<script>(function(){ window.location.href='school_year.php'; })()</script>";
+	$sy = validate($_POST['txtSchoolYear']);
+	$school_year = $sy."-".($sy+1);
+	$select = mysqli_query($con, "SELECT * FROM tblschoolyear where schoolyear='$school_year'");
+	if(mysqli_num_rows($select) > 0){
+		?> <script> alert('School Year Already Exist.'); window.location.href='school_year.php';</script> <?php
+	}else{
+		$crud->update("tblschoolyear", array("id", "schoolyear"), array($id, $school_year));
+		echo "<script>alert('Successfully updated.');</script>";
+		echo "<script>(function(){ window.location.href='school_year.php'; })()</script>";
+	}
 }
 
 if(isset($_POST['btnAddSubjects']))
@@ -236,9 +364,32 @@ if(isset($_POST['add_studclass']))
 		$studentid = $_POST['students'];
 		$cntid = count($studentid);
 		for ($i=0; $i < $cntid; $i++) { 
-			$crud->insert("tblstudentclass", array("classid", "studentid", "cur_id", "gradelevel", "schoolyearid"), array($classid, $studentid[$i], $cur_id, $gradelevel, $schoolyearid));
+
+			$querys_enroll = mysqli_query($con, "SELECT * from tblstudentclass where classid='$classid' and studentid = '$studentid[$i]' and gradelevel = '$gradelevel'")or die(mysqli_error($con));
+
+			if (mysqli_num_rows($querys_enroll) > 0) 
+			{
+				?><script> alert('Students Already Enrolled.'); window.location = "student_class.php"; </script><?php
+			}
+			else
+			{ 
+				$subj = mysqli_query($con, "SELECT * FROM tblsubjects where yearlevelid = '$gradelevel'")or die(mysqli_error($con));
+				while($rowlvl = mysqli_fetch_array($subj)){
+					$lvlid = $rowlvl['id'];
+					$crud->insert("tblstudentclass", array("classid", "subjectid", "studentid", "cur_id", "gradelevel", "schoolyearid"), array($classid, $lvlid, $studentid[$i], $cur_id, $gradelevel, $schoolyearid));
+				}
+
+				$clearance = mysqli_query($con, "SELECT * FROM clearancetbl")or die(mysqli_error($con));
+				while($rowc = mysqli_fetch_array($clearance)){
+					$clearanceid = $rowc['id'];
+					$studclearance = mysqli_query($con, "SELECT * FROM studclearance where clearanceid='$clearanceid' and studid='$studentid[$i]'")or die(mysqli_error($con));
+					if(mysqli_num_rows($studclearance) == 0){
+						$crud->insert("studclearance", array("studid", "clearanceid", "status", "syid"), array($studentid[$i], $clearanceid, '0', $schoolyearid));
+					}
+				}
+				?><script> alert('Student successfully enrolled.'); window.location = "student_class.php"; </script><?php
+			}
 		}
-		?><script> alert('Student successfully enrolled.'); window.location = "student_class.php"; </script><?php
 	}else{
 		$stud_list = $_FILES['stud_list']['tmp_name'];
 		if($_FILES["stud_list"]["size"] > 0) {
@@ -262,7 +413,7 @@ if(isset($_POST['add_studclass']))
 						$rowstud = mysqli_fetch_array($stud_exist);
 						$stud_id = $rowstud['id'];
 
-						$querys_enroll = mysqli_query($con, "SELECT * from tblstudentclass where classid='$classid' and studentaid = '$stud_id' and gradelevel = '$gradelevel'")or die(mysqli_error($con));
+						$querys_enroll = mysqli_query($con, "SELECT * from tblstudentclass where classid='$classid' and studentid = '$stud_id' and gradelevel = '$gradelevel'")or die(mysqli_error($con));
 
 						if (mysqli_num_rows($querys_enroll) > 0) 
 						{
@@ -270,7 +421,16 @@ if(isset($_POST['add_studclass']))
 						}
 						else
 						{ 
-							$crud->insert("tblstudentclass", array("classid", "studentid", "cur_id", "gradelevel", "txtschoolyear"), array($classid, $stud_id, $cur_id, $gradelevel,$schoolyearid));
+							$subj = mysqli_query($con, "SELECT * FROM tblsubjects where yearlevelid = '$gradelevel'")or die(mysqli_error($con));
+							while($rowsub = mysqli_fetch_array($subj)){
+								$subid = $rowsub['id'];
+								$crud->insert("tblstudentclass", array("classid", "subjectid", "studentid", "cur_id", "gradelevel", "txtschoolyear"), array($classid, $subid, $stud_id, $cur_id, $gradelevel,$schoolyearid));
+							}
+
+							$studclearance = mysqli_query($con, "SELECT * FROM studclearance where clearanceid='$clearanceid' and and studid='$stud_id'")or die(mysqli_error($con));
+							if(mysqli_num_rows($studclearance) == 0){
+								$crud->insert("studclearance", array("studid", "clearanceid", "status", "syid"), array($stud_id, $clearanceid, '0', $schoolyearid));
+							}
 							?><script> alert('Student successfully enrolled.'); window.location = "student_class.php"; </script><?php
 						}
 					}  else { 
@@ -394,17 +554,16 @@ if(isset($_POST['edit_password']))
 
 if(isset($_POST['add_studentgrade']))
 {
-	$syid = validate($_POST['cboSchoolYear']);
 	$adviserid = $sessionid;
 	$classid = $_POST['cboclass'];
 	$studid = $_POST['cbostudent']; 
 	$subjectid = validate($_POST['cbosubjectid']);
 	$prelim = $_POST['prelim'];
-	$select = mysqli_query($con, "SELECT * FROM tblstudentgrade where studentid='$studid' and schoolyearid='$syid' and subjectid='$subjectid' and classid='$classid' and adviserid='$adviserid'")or die(mysqli_error($con));
+	$select = mysqli_query($con, "SELECT * FROM tblstudentgrade where studentid='$studid' and subjectid='$subjectid' and classid='$classid' and adviserid='$adviserid'")or die(mysqli_error($con));
 	if(mysqli_num_rows($select) > 0){
 		?><script> alert('Student Grade Already exist.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
 	}else{
-		$crud->insert("tblstudentgrade", array("schoolyearid", "studentid", "subjectid", "classid", "adviserid", "prelim"), array($syid,$studid,$subjectid,$classid,$adviserid,$prelim));
+		$crud->insert("tblstudentgrade", array("studentid", "subjectid", "classid", "adviserid", "prelim"), array($studid,$subjectid,$classid,$adviserid,$prelim));
 		?><script> alert('Successfully added.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
 	}
 }
@@ -570,15 +729,12 @@ if(isset($_POST['del_class']))
 }
 
 
-
-
 if(isset($_POST['btn_update_studgrade']))
 {
 	$txt_id = $_POST['hidden_id'];
-	$txt_edit_sy = $_POST['txt_edit_sy'];
+	$studid = $_POST['studid'];
 	$txt_edit_class = $_POST['txt_edit_class'];
 	$txt_edit_subj = $_POST['txt_edit_subj'];
-	$txt_edit_stud = $_POST['txt_edit_stud'];
 	$txtprelim = $_POST['txtprelim'];
 	$txtmidterm = $_POST['txtmidterm'];
 	$txtprefi = $_POST['txtprefi'];
@@ -602,7 +758,11 @@ if(isset($_POST['btn_update_studgrade']))
 			$query = mysqli_query($con,"UPDATE tblstudentgrade SET gradeaverage = '".$average."', remarks = 'No Final Remarks'  where id = '".$txt_id."' ");    	
 		}
 	}
-	?><script> alert('Successfully updated.'); window.location.href="student_grade.php<?php echo '?subid='.$txt_edit_subj.'&classid='.$txt_edit_class; ?>"; </script><?php
+	if($userType == "teacher"){
+		?><script> alert('Successfully updated.'); window.location.href="student_grade.php<?php echo '?subid='.$txt_edit_subj.'&classid='.$txt_edit_class; ?>"; </script><?php
+	}else if($userType == "registrar"){
+		?><script> alert('Successfully updated.'); window.location.href="stud_grade.php<?php echo '?uid='.$studid ?>"; </script><?php
+	}
 }
 
 if(isset($_POST['active_schoolyear_btn']))
@@ -637,8 +797,6 @@ if(isset($_POST['active_schoolyear_btn']))
 if(isset($_POST['statusclearance']))
 {
 	$id =  $_POST['clearanceid'];
-	$classid = $_POST['subid'];
-	$subid = $_POST['classid'];
 	$result = mysqli_query($con, "SELECT clearance_status FROM tblstudentclass WHERE id = $id");
 	$status = 0;
 	while($row = mysqli_fetch_array($result)) { $status = $row['clearance_status']; }
@@ -650,7 +808,36 @@ if(isset($_POST['statusclearance']))
 	}
 	$crud->update("tblstudentclass", array("id", "clearance_status"), array($id, $status));
 	echo "<script>alert('Status changed.');</script>";
-	?><script> window.location.href="viewstud_clearance.php<?php echo '?subid='.$subid.'&classid='.$classid; ?>"; </script><?php
+	if($userType == "teacher"){
+		$classid = $_POST['classid'];
+		$subid = $_POST['subid'];
+		?><script> window.location.href="viewstud_clearance.php<?php echo '?subid='.$subid.'&classid='.$classid; ?>"; </script><?php
+	}else if($userType == "registrar"){
+		$studid = $_POST['studid'];
+		?><script> window.location.href="stud_clearance.php<?php echo '?uid='.$studid ?>"; </script><?php
+	}
+}
+
+if(isset($_POST['statussignatory']))
+{
+	$id =  $_POST['clearanceid'];
+	$studid = $_POST['studid'];
+	$result = mysqli_query($con, "SELECT status FROM studclearance WHERE id = $id");
+	$status = 0;
+	while($row = mysqli_fetch_array($result)) { $status = $row['status']; }
+
+	if($status == 0) {
+		$status = 1;
+	} else {
+		$status = 0;
+	}
+	$crud->update("studclearance", array("id", "status"), array($id, $status));
+	echo "<script>alert('Status changed.');</script>";
+	if($userType == "admin"){
+		?><script> window.location.href="view_report.php<?php echo '?uid='.$studid ?>"; </script><?php
+	}else if($userType == "registrar"){
+		?><script> window.location.href="stud_clearance.php<?php echo '?uid='.$studid ?>"; </script><?php
+	}
 }
 
 if(isset($_POST['activeStudentBtn']))
@@ -797,17 +984,18 @@ if(isset($_POST['btnActiveAdmin']))
 if(isset($_POST['add_empclass']))
 {
 	$classid = $_POST['cboclass'];
+	$subid = validate($_POST['cbosubject']);
 	$empid = validate($_POST['cboempid']);
 	$grdlvlid = validate($_POST['grdlvlid']);
 	$curid = validate($_POST['curid']);
 	$schoolyearid = validate($_POST['txtschoolyear']);
 	$cntclass = count($classid);
 	for ($i=0; $i < $cntclass; $i++) { 
-		$select = mysqli_query($con, "SELECT * FROM tblteacheradvisory where classid='$classid[$i]' and teacherid='$empid' and gradelvl='$grdlvlid'")or die(mysqli_error($con));
+		$select = mysqli_query($con, "SELECT * FROM tblteacheradvisory where classid='$classid[$i]' and subjectid='$subid' and teacherid='$empid' and gradelvl='$grdlvlid'")or die(mysqli_error($con));
 		if(mysqli_num_rows($select) > 0){
 			?> <script> alert('This class is already assigned.'); window.location.href='teacher_advisory.php';</script> <?php
 		}else{
-			$crud->insert("tblteacheradvisory", array("classid", "teacherid", "gradelvl", "curiculumid", "schoolyearid"), array($classid[$i],$empid,$grdlvlid,$curid,$schoolyearid));
+			$crud->insert("tblteacheradvisory", array("classid", "subjectid", "teacherid", "gradelvl", "curiculumid", "schoolyearid"), array($classid[$i],$subid,$empid,$grdlvlid,$curid,$schoolyearid));
 			echo "<script>alert('Successfully added.');</script>";
 			echo "<script>(function(){ window.location.href='teacher_advisory.php'; })()</script>";
 		}
@@ -838,12 +1026,13 @@ if(isset($_POST['update_teacher_advisory']))
 	$teacher_advisory_id = validate($_POST['teacher_advisory_id']);
 	$teacherid = validate($_POST['cboempid']);
 	$classid = $_POST['cboclass'];
+	$subid = validate($_POST['cbosubject']);
 	$grdlvlid = validate($_POST['grdlvlid']);
 	$curid = validate($_POST['curid']);
 	$schoolyearid = validate($_POST['txtschoolyear']);
 	$cntclass = count($classid);
 	for ($i=0; $i < $cntclass; $i++) { 
-		$crud->update("tblteacheradvisory", array("id", "teacherid", "classid", "gradelvl", "curiculumid", "schoolyearid"), array($teacher_advisory_id, $teacherid, $classid[$i], $grdlvlid, $curid, $schoolyearid));
+		$crud->update("tblteacheradvisory", array("id", "teacherid", "classid", "subjectid", "gradelvl", "curiculumid", "schoolyearid"), array($teacher_advisory_id, $teacherid, $classid[$i], $subid, $grdlvlid, $curid, $schoolyearid));
 	}
 	echo "<script>alert('Saved.');</script>";
 	echo "<script>(function(){ window.location.href='teacher_advisory.php'; })()</script>";
@@ -866,9 +1055,9 @@ if(isset($_POST['edit_empadvisory'])){
 		$teacherid = $row['teacherid'];
 		$classid = $row['classid'];
 		$gradelvl = $row['gradelvl'];
+		$subid = $row['subjectid'];
 	}
-
-	echo $curid . "," . $gradelvl . "," . $classid . "," . $teacherid;
+	echo $curid . "," . $gradelvl . "," . $classid . "," . $teacherid . "," . $subid;
 }
 
 //today
@@ -936,196 +1125,160 @@ if(isset($_POST['edit_stud_class'])){
 	echo $cur_id . "," . $gradeid . "," . $classid . "," . $studid . "," . $classname;
 }
 
-if(isset($_POST['get_top_students']))
-{ 
-	$classid = addslashes($_POST['classid']);
-	$subid = addslashes($_POST['subid']);
-	$period = $_POST['period'];
-	$res = mysqli_query($con, "SELECT *,ts.id as sgid, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
-		FROM tblstudentgrade ts
-		LEFT JOIN usertbl s ON ts.studentid = s.id
-		LEFT JOIN tblteacheradvisory ta ON ts.classid = ta.classid
-		LEFT JOIN usertbl t ON ts.adviserid = t.id
-		LEFT JOIN tblclass c ON ts.classid = c.id
-		LEFT JOIN tblsubjects sb on ts.subjectid = sb.id
-		where (ts.studentid = '".$sessionid."' or ts.adviserid = '".$sessionid."') and ts.subjectid='".$subid."' and ts.classid='".$classid."' and ts.period='$period'")or die(mysqli_error($con));
-	$row_class = mysqli_fetch_array($res);
+if(isset($_POST['btnaddannounce']))
+{
+	$title = validate($_POST['txtttile']);
+	$desc = validate($_POST['txtdesc']);
+	move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
+	$file = $_FILES['image']['name'];
+	$crud->insert("announcement", array("title", "description", "image"), array($title,$desc,$file));
 
-	$result = mysqli_query($con, "SELECT *,ts.id as sgid, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
-		FROM tblstudentgrade ts
-		LEFT JOIN tblstudentclass sc ON ts.classid = sc.classid
-		AND ts.studentid = sc.studentid
-		AND ts.subjectid = sc.subjectid
-		LEFT JOIN usertbl s ON ts.studid = s.id
-		LEFT JOIN tblteacheradvisory ta ON ts.classid = ta.classid
-		LEFT JOIN usertbl t ON ts.adviserid = t.id
-		LEFT JOIN tblclass c ON ts.classid = c.id
-		LEFT JOIN tblsubjects sb on ts.subjectid = sb.id
-		where (ts.studentid = '".$sessionid."' or ts.adviserid = '".$sessionid."') and ts.subjectid='".$subid."' and ts.classid='".$classid."' and ts.period='$period' group by sgid order by ts.grade asc")or die(mysqli_error($con));
-	if(mysqli_num_rows($result) > 0){
-		$counter = 0;
-		?>
-		<table class="table <?php if($userType=='teacher'){ echo 'table-bordered'; }?>"> 
-			<thead> 
-				<tr>
-					<?php if($userType=="teacher"){ ?><th></th> <?php }else{ ?>
-					<th>#</th> <?php } ?>
-					<th>Top 10 Students in <?php echo $row_class['subjectname']; ?> from <?php echo $row_class['classname']; ?> </th> 
-					<th><?php if($userType=="teacher"){ echo "Grade"; } ?></th> 
-				</tr> 
-			</thead>
-			<tbody> 
-				<?php while($row = mysqli_fetch_array($result)) { ?>
-				<tr> 
-					<?php if($userType=="teacher"){ ?><td scope="row"><input type="checkbox" id="records" name="topstudid[]" value="<?php echo $row['sgid']; ?>"></td><?php }else{ ?>
-					<td scope="row"><?php echo $counter = $counter + 1; ?></td><?php } ?>
-					<td><?php echo $row['sname']; ?></td> 
-					<td align="center"><?php echo $row['grade']; ?></td> 
-				</tr> 
-				<?php } ?>
-			</tbody> 
-		</table>
-		<?php }else{ ?>
-		<div class="alert alert-danger">No data found.</div>
-		<?php } 
+	$users = $_POST['users'];
+	$cnt = count($users);
+
+	$select = mysqli_query($con, "SELECT * FROM announcement WHERE title = '$title' and description='$desc'");
+	$rowa = mysqli_fetch_array($select);
+	$id = $rowa['id'];
+	for ($i=0; $i < $cnt; $i++) 
+	{ 
+		$crud->insert("announcement_privilege", array("announceid", "user"), array($id, $users[$i]));
 	}
+	echo "<script>alert('Announcement added.');</script>";
+	echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
+}
 
-	if(isset($_POST['btnaddannounce']))
+if(isset($_POST['btnaddslides']))
+{
+	move_uploaded_file($_FILES['slideimg']['tmp_name'], "images/".$_FILES['slideimg']['name']);
+	$file = $_FILES['slideimg']['name'];
+	$crud->insert("slide_tbl", array("image"), array($file));
+
+	echo "<script>alert('Slide Show added.');</script>";
+	echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
+}
+
+if(isset($_POST['edit_announce']))
+{
+	$aid = $_POST['announceid'];
+	$title = validate($_POST['txtttile']);
+	$desc = validate($_POST['txtdesc']);
+	move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
+	$location = validate($_FILES['image']['name']);
+	$crud->update("announcement", array("id", "title", "description", "image"), array($aid,$title,$desc,$location));
+
+	echo "<script>alert('Announcement updated.');</script>";
+	echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
+}
+
+if(isset($_POST['del_announce']))
+{
+	if (!empty($_POST['announceid'])) 
 	{
-		$title = validate($_POST['txtttile']);
-		$desc = validate($_POST['txtdesc']);
-		move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
-		$file = $_FILES['image']['name'];
-		$crud->insert("announcement", array("title", "description", "image"), array($title,$desc,$file));
-
-		echo "<script>alert('Announcement added.');</script>";
+		$announceid = $_POST['announceid'];
+		$N = count($announceid);
+		for($i=0; $i < $N; $i++)
+		{
+			mysqli_query($con, "DELETE from announcement where id = '$announceid[$i]'")or die(mysqli_error($con));
+			mysqli_query($con, "DELETE from announcement_privilege where announceid = '$announceid[$i]'")or die(mysqli_error($con));
+		}
+		echo "<script>alert('Announcement deleted.');</script>";
 		echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
 	}
-
-	if(isset($_POST['btnaddslides']))
+	else
 	{
-		move_uploaded_file($_FILES['slideimg']['tmp_name'], "images/".$_FILES['slideimg']['name']);
-		$file = $_FILES['slideimg']['name'];
-		$crud->insert("slide_tbl", array("image"), array($file));
-
-		echo "<script>alert('Slide Show added.');</script>";
-		echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
-	}
-
-	if(isset($_POST['edit_announce']))
-	{
-		$aid = $_POST['announceid'];
-		$title = validate($_POST['txtttile']);
-		$desc = validate($_POST['txtdesc']);
-		move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
-		$location = validate($_FILES['image']['name']);
-		$crud->update("announcement", array("id", "title", "description", "image"), array($aid,$title,$desc,$location));
-
-		echo "<script>alert('Announcement updated.');</script>";
+		echo "<script>alert('Please select announcement you want to delete, Thank you!');</script>";
 		echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
 	}
+}
 
-	if(isset($_POST['del_announce']))
-	{
-		if (!empty($_POST['announceid'])) 
-		{
-			$announceid = $_POST['announceid'];
-			$N = count($announceid);
-			for($i=0; $i < $N; $i++)
-			{
-				mysqli_query($con, "DELETE from announcement where id = '$announceid[$i]'")or die(mysqli_error($con));
-			}
-			echo "<script>alert('Announcement deleted.');</script>";
-			echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
-		}
-		else
-		{
-			echo "<script>alert('Please select announcement you want to delete, Thank you!');</script>";
-			echo "<script>(function(){ window.location.href='announcement.php'; })()</script>";
-		}
-	}
-
-	if(isset($_POST['btnaddevent']))
-	{
-		$title = validate($_POST['txtttile']);
-		$desc = validate($_POST['txtdesc']);
+if(isset($_POST['btnaddevent']))
+{
+	$title = validate($_POST['txtttile']);
+	$start = validate($_POST['txtdatestart']);
+	$desc = validate($_POST['txtdesc']);
+	$select = mysqli_query($con, "SELECT * FROM event_tbl WHERE title = '$title' and descript='$desc'");
+	if(mysqli_num_rows($select) > 0){
+		?> <script> alert('Event Already Exist.'); window.location.href='events.php';</script> <?php
+	}else{
 		move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
 		$file = $_FILES['image']['name'];
-		$crud->insert("event_tbl", array("title", "descript", "image", "dateupload"), array($title,$desc,$file, date("M d, Y - h:i A")));
-
+		$crud->insert("event_tbl", array("title", "descript", "image", "datestart"), array($title,$desc,$file, $start));
 		echo "<script>alert('Event added.');</script>";
 		echo "<script>(function(){ window.location.href='events.php'; })()</script>";
 	}
+}
 
 
-	if(isset($_POST['edit_event']))
+if(isset($_POST['edit_event']))
+{
+	$aid = $_POST['eventid'];
+	$title = validate($_POST['txtttile']);
+	$desc = validate($_POST['txtdesc']);
+	$start = validate($_POST['txtdatestart']);
+	move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
+	$location = validate($_FILES['image']['name']);
+	$crud->update("event_tbl", array("id", "title", "descript", "image", "datestart"), array($aid,$title,$desc,$location, $start));
+	echo "<script>alert('Event updated.');</script>";
+	echo "<script>(function(){ window.location.href='events.php'; })()</script>";
+}
+
+if(isset($_POST['del_event']))
+{
+	if (!empty($_POST['eventid'])) 
 	{
-		$aid = $_POST['eventid'];
-		$title = validate($_POST['txtttile']);
-		$desc = validate($_POST['txtdesc']);
-		move_uploaded_file($_FILES['image']['tmp_name'], "images/".$_FILES['image']['name']);
-		$location = validate($_FILES['image']['name']);
-		$crud->update("event_tbl", array("id", "title", "descript", "image"), array($aid,$title,$desc,$location));
-
-		echo "<script>alert('Event updated.');</script>";
+		$eventid = $_POST['eventid'];
+		$N = count($eventid);
+		for($i=0; $i < $N; $i++)
+		{
+			mysqli_query($con, "DELETE from event_tbl where id = '$eventid[$i]'")or die(mysqli_error($con));
+		}
+		echo "<script>alert('Event deleted.');</script>";
 		echo "<script>(function(){ window.location.href='events.php'; })()</script>";
 	}
-
-	if(isset($_POST['del_event']))
+	else
 	{
-		if (!empty($_POST['eventid'])) 
-		{
-			$eventid = $_POST['eventid'];
-			$N = count($eventid);
-			for($i=0; $i < $N; $i++)
-			{
-				mysqli_query($con, "DELETE from event_tbl where id = '$eventid[$i]'")or die(mysqli_error($con));
-			}
-			echo "<script>alert('Event deleted.');</script>";
-			echo "<script>(function(){ window.location.href='events.php'; })()</script>";
-		}
-		else
-		{
-			echo "<script>alert('Please select event you want to delete, Thank you!');</script>";
-			echo "<script>(function(){ window.location.href='events.php'; })()</script>";
-		}
+		echo "<script>alert('Please select event you want to delete, Thank you!');</script>";
+		echo "<script>(function(){ window.location.href='events.php'; })()</script>";
 	}
+}
 
-	if(isset($_POST['import_studentgrade']))
+if(isset($_POST['import_studentgrade']))
+{
+	$classid = $_POST['cboclass'];
+	$subjectid = validate($_POST['cbosubjectid']);
+	$adviserid = $sessionid;
+	$filename = $_FILES["studentgrade"]["tmp_name"];
+	$average = null;
+	if($_FILES["studentgrade"]["size"] > 0)
 	{
-		$syid = validate($_POST['cboSchoolYear']);
-		$classid = $_POST['cboclass'];
-		$subjectid = validate($_POST['cbosubjectid']);
-		$adviserid = $sessionid;
-		$filename = $_FILES["studentgrade"]["tmp_name"];
-		$average = null;
-		if($_FILES["studentgrade"]["size"] > 0)
-		{
-			$row = true;
-			$ColNum = 7;
-			$file = fopen($filename, "r");
-			while (($stud_data = fgetcsv($file, 30000, ",")) !== FALSE) {
-				$countcols = count($stud_data);
-				if ($countcols != $ColNum) 
-				{
-					?><script> alert('Please follow the format of importing student grades.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
-				} else {
-					if($row) { $row = false; continue; }
+		$row = true;
+		$ColNum = 7;
+		$file = fopen($filename, "r");
+		while (($stud_data = fgetcsv($file, 30000, ",")) !== FALSE) {
+			$countcols = count($stud_data);
+			if ($countcols != $ColNum) 
+			{
+				?><script> alert('Please follow the format of importing student grades.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
+			} else {
+				if($row) { $row = false; continue; }
 
-					$fullname = explode(" ", $stud_data[0]);
-					$Fname = validate($fullname[0]);
-					$Lname = validate($fullname[1]);
+				$fullname = explode(" ", $stud_data[0]);
+				$Fname = validate($fullname[0]);
+				$Lname = validate($fullname[1]);
 
-					$prelim = validate($stud_data[1]);
-					$midterm = validate($stud_data[2]);
-					$prefi = validate($stud_data[3]);
-					$finals = validate($stud_data[4]);
+				$prelim = validate($stud_data[1]);
+				$midterm = validate($stud_data[2]);
+				$prefi = validate($stud_data[3]);
+				$finals = validate($stud_data[4]);
 
-					$selectuser = mysqli_query($con, "SELECT * FROM usertbl where fname='$Fname' and lname='$Lname'")or die(mysqli_error($con));
-					$rowuser = mysqli_fetch_array($selectuser);
-					$studid =	$rowuser['id'];
+				$selectuser = mysqli_query($con, "SELECT * FROM usertbl where fname='$Fname' and lname='$Lname'")or die(mysqli_error($con));
+				$rowuser = mysqli_fetch_array($selectuser);
+				$studid =	$rowuser['id'];
 
-					$select = mysqli_query($con, "SELECT * FROM tblstudentgrade where studentid='$studid' and schoolyearid='$syid' and subjectid='$subjectid' and classid='$classid' and adviserid='$adviserid'")or die(mysqli_error($con));
+				$enrolled = mysqli_query($con, "SELECT * FROM tblstudentclass where studentid='$studid' and subjectid='$subjectid' and classid='$classid'")or die(mysqli_error($con));
+
+				if(mysqli_num_rows($enrolled) > 0){
+					$select = mysqli_query($con, "SELECT * FROM tblstudentgrade where studentid='$studid' and subjectid='$subjectid' and classid='$classid' and adviserid='$adviserid'")or die(mysqli_error($con));
 
 					if (mysqli_num_rows($select) > 0) 
 					{
@@ -1137,156 +1290,264 @@ if(isset($_POST['get_top_students']))
 						{
 							$ave = validate($stud_data[5]);
 							$remarks = validate($stud_data[6]);
-							$crud->insert("tblstudentgrade", array("schoolyearid", "studentid", "subjectid", "classid", "adviserid", "prelim", "midterm", "prefi", "final", "gradeaverage", "remarks"), 
-								array($syid,$studid,$subjectid,$classid,$adviserid,$prelim,$midterm,$prefi,$finals,$ave,$remarks));
+							$crud->insert("tblstudentgrade", array("studentid", "subjectid", "classid", "adviserid", "prelim", "midterm", "prefi", "final", "gradeaverage", "remarks"), 
+								array($studid,$subjectid,$classid,$adviserid,$prelim,$midterm,$prefi,$finals,$ave,$remarks));
 						}else{
 							$total = (($prelim + $midterm + $prefi + $finals) / 4) ;
 							$average = round($total);
-							$crud->insert("tblstudentgrade", array("schoolyearid", "studentid", "subjectid", "classid", "adviserid", "prelim", "midterm", "prefi", "final", "gradeaverage", "remarks"), 
-								array($syid,$studid,$subjectid,$classid,$adviserid,$prelim,$midterm,$prefi,$finals,$average,"No Final Remarks"));
+							$crud->insert("tblstudentgrade", array("studentid", "subjectid", "classid", "adviserid", "prelim", "midterm", "prefi", "final", "gradeaverage", "remarks"), 
+								array($studid,$subjectid,$classid,$adviserid,$prelim,$midterm,$prefi,$finals,$average,"No Final Remarks"));
 						}
 						?><script> alert('Successfully added.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
 					}
+				}else{
+					?><script> alert('Student not enrolled.'); window.location.href="student_grade.php<?php echo '?subid='.$subjectid.'&classid='.$classid; ?>"; </script><?php
 				}
 			}
-			fclose($file);
 		}
-		mysqli_close($con);
+		fclose($file);
 	}
+	mysqli_close($con);
+}
 
-	if(isset($_POST['add_curriculum']))
-	{
-		$curriculum = validate($_POST['txtcurriculum']);
-		$gradelevel = validate($_POST['txtprogram']);
+if(isset($_POST['add_curriculum']))
+{
+	$curriculum = validate($_POST['txtcurriculum']);
+	$gradelevel = validate($_POST['txtprogram']);
 
-		$crud->insert("curriculumtbl", array("curname", "gradelevel", "datecreated"), array($curriculum, $gradelevel, date("M d, Y")));
+	$crud->insert("curriculumtbl", array("curname", "gradelevel", "datecreated"), array($curriculum, $gradelevel, date("M d, Y")));
 
-		echo "<script>alert('Curriculum added.');</script>";
-		echo "<script>window.location.href='curriculum.php';</script>";
-	}
+	echo "<script>alert('Curriculum added.');</script>";
+	echo "<script>window.location.href='curriculum.php';</script>";
+}
 
-	if(isset($_POST['edit_curriculum']))
-	{
-		$curriculum_id = validate($_POST['txtcumid']);
-		$curriculum = validate($_POST['txtcurriculum']);
-		$gradelevel = validate($_POST['txtprogram']);
+if(isset($_POST['edit_curriculum']))
+{
+	$curriculum_id = validate($_POST['txtcumid']);
+	$curriculum = validate($_POST['txtcurriculum']);
+	$gradelevel = validate($_POST['txtprogram']);
 
-		$crud->update("curriculumtbl", array("id", "curname", "gradelevel"), array($curriculum_id, $curriculum, $gradelevel));
-		echo "<script>alert('Curriculum updated.');</script>";
-		echo "<script>window.location.href='curriculum.php';</script>";
+	$crud->update("curriculumtbl", array("id", "curname", "gradelevel"), array($curriculum_id, $curriculum, $gradelevel));
+	echo "<script>alert('Curriculum updated.');</script>";
+	echo "<script>window.location.href='curriculum.php';</script>";
 
-	}
+}
 
-	if(isset($_POST['add_studparent']))
-	{
-		$studid = validate($_POST['studid']);
-		$firstname = validate($_POST['txtfname']);
-		$lastname = validate($_POST['txtlname']);
-		$contact = validate($_POST['txtcontact']);
-		$username = validate($_POST['txtuname']);
+if(isset($_POST['add_studparent']))
+{
+	$studid = $_POST['cboStudent'];
+	$firstname = validate($_POST['txtFirstname']);
+	$lastname = validate($_POST['txtLastname']);
+	$username = validate($_POST['txtUsername']);
 
-		$selectparent = mysqli_query($con, "SELECT * FROM parentstudtbl where studid='$studid'");
-		$cnt = mysqli_num_rows($selectparent);
-		if($cnt > 0){
-			$id = $_POST['parentid'];
-			$crud->update("usertbl", array("id", "username", "fname" ,"mname", "lname", "contact"), array($id, $username, $firstname, " ", $lastname, $contact));
-		}else{
-			$crud->insert("usertbl", array("username", "password", "fname" ,"mname", "lname", "contact", "usertype", "status", "profile_pic"), array($username, "parent123", $firstname, " ", $lastname, $contact, "parent", 0, "images/man-28.png"));
-			$parentstud = mysqli_query($con, "SELECT * FROM usertbl where username='$username'");
-			$rowparent = mysqli_fetch_array($parentstud);
-			$parentid = $rowparent['id'];
-			$crud->insert("parentstudtbl", array("parentid", "studid"), array($parentid, $studid));
-		}
-		?><script>alert('Saved.'); window.location = "addstud_parent.php<?php echo '?id='.$studid; ?>"</script><?php 
-	}
+	$selectparent = mysqli_query($con, "SELECT * FROM usertbl where usertype='parent' and fname='$firstname' and lname='$lastname' or username='$username'");
+	$cnt = mysqli_num_rows($selectparent);
+	if($cnt > 0){
+		?><script> alert('Parent Already exist.'); window.location.href="parent.php"; </script><?php
+	}else{
+		$crud->insert("usertbl", array("username", "password", "fname" ,"mname", "lname", "contact", "usertype", "status", "profile_pic"), array($username, "parent123", $firstname, " ", $lastname, '', "parent", 0, "images/man-28.png"));
 
-	if(isset($_POST['btnAddRegistrar']))
-	{
+		$parentstud = mysqli_query($con, "SELECT * FROM usertbl where username='$username'");
+		$rowparent = mysqli_fetch_array($parentstud);
+		$parentid = $rowparent['id'];
 
-		$username = validate($_POST['txtUsername']);
-		$firstname = validate($_POST['txtFirstname']);
-		$lastname = validate($_POST['txtLastname']);
-		$middlename = validate($_POST['txtMiddlename']);
-		$contact = validate($_POST['txtContact']);
-
-		$crud->insert("usertbl", array("username", "password" ,"fname", "mname", "lname", "contact", "usertype", "profile_pic"), array($username, "registrar123", $firstname, $middlename, $lastname, $contact, "registrar", "images/businessman.png"));		
-
-		echo "<script>alert('Registrar added.');</script>";
-		echo "<script>(function(){ window.location.href='registrar.php'; })()</script>";
-	}
-
-	if(isset($_POST['editregistrar']))
-	{
-		$id = validate($_POST['id']);
-		$username = validate($_POST['txtUsername']);
-		$firstname = validate($_POST['txtFirstname']);
-		$lastname = validate($_POST['txtLastname']);
-		$middlename = validate($_POST['txtMiddlename']);
-		$contact = validate($_POST['txtContact']);
-
-		$crud->update("usertbl", array("id", "username", "fname", "mname", "lname", "contact"), array($id, $username, $firstname, $middlename, $lastname, $contact));
-
-		echo "<script>alert('Saved.');</script>";
-		echo "<script>(function(){ window.location.href='registrar.php'; })()</script>";
-	}
-
-	if(isset($_POST['btnedit']))
-	{
-		$curid = validate($_POST['curid']);
-		$gradeid = validate($_POST['gradeid']);
-
-		$query = "SELECT * FROM tblclass WHERE cur_id = " . $curid . " AND yearlevelid = " . $gradeid;
-		$result = mysqli_query($con, $query);
-
-		while($row = mysqli_fetch_array($result))
-		{
-			$data[] = $row;
-		}
-		print json_encode($data);
-	}
-
-	if(isset($_POST['del_slidepic']))
-	{
-		if(!empty($_POST['slideid']))
-		{
-			$slideid = $_POST['slideid'];
-			$N = count($slideid);
-			for($i=0; $i < $N; $i++)
-			{
-				mysqli_query($con, "DELETE from slide_tbl where id = '$slideid[$i]'")or die(mysqli_error($con));
+		for ($i=0; $i < count($studid); $i++) { 
+			$selectp = mysqli_query($con, "SELECT * FROM parentstudtbl where parentid='$parentid' and studid='$studid[$i]'");
+			$cntp = mysqli_num_rows($selectp);
+			if($cntp > 0){
+				?><script> alert('Student already exist on this parent.'); window.location.href="parent.php"; </script><?php
+			}else{
+				$crud->insert("parentstudtbl", array("parentid", "studid"), array($parentid, $studid[$i]));
 			}
-			echo "<script>alert('Slide deleted.');</script>";
-			echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
-		}
-		else
-		{
-
-			echo "<script>alert('Please select a slide you want to delete, thank you!');</script>";
-			echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
+			?><script>alert('Parent Added.'); window.location = "parent.php"</script><?php 
 		}
 	}
+}
 
+if(isset($_POST['edit_parent']))
+{
+	$id = validate($_POST['id']);
+	$username = validate($_POST['txtUsername']);
+	$firstname = validate($_POST['stxtFirstname']);
+	$lastname = validate($_POST['txtLastname']);
+	$studid = $_POST['cboStudent'];
 
-	if(isset($_POST['del_message']))
+	$crud->update("usertbl", array("id", "username", "fname", "mname", "lname", "contact"), array($id, $username, $firstname, $lastname));
+
+	for ($i=0; $i < count($studid); $i++) { 
+		$crud->update("parentstudtbl", array("parentid", "studid"), array($id, $studid[$i]));
+	}
+	// echo "<script>alert('Saved.');</script>";
+	// echo "<script>(function(){ window.location.href='parent.php'; })()</script>";
+}
+
+if(isset($_POST['activeParentBtn']))
+{
+	$id = $_POST['parentid'];
+
+	$query = "SELECT status FROM usertbl WHERE id = $id";
+	$result = mysqli_query($con, $query);
+
+	$status = 0;
+	while($row = mysqli_fetch_array($result))
 	{
-		if(!empty($_POST['msg']))
-		{
-			$msg = $_POST['msg'];
-			$n = count($msg);
-
-			for($i = 0; $i < $n; $i++)
-			{
-				mysqli_query($con, "DELETE from conversation_tbl where C_ID = '$msg[$i]'")or die(mysqli_error($con));
-			}
-			echo "<script>alert('Message deleted.');</script>";
-			echo "<script>(function(){ window.location.href='inbox.php'; })()</script>";
-		}
-		else
-		{
-
-			echo "<script>alert('Please select a message you want to delete, thank you!');</script>";
-			echo "<script>(function(){ window.location.href='inbox.php'; })()</script>";
-		}
+		$status = $row['status'];
 	}
 
-	?>									
+	if($status == 0){
+		$status = 1;
+	} else {
+		$status = 0;
+	}
+	$crud->update("usertbl", array("id", "status"), array($id, $status));
+	header("location:parent.php");
+}
+
+if(isset($_POST['getstudid'])){
+	$id = $_POST['userid'];
+	$select = mysqli_query($con, "SELECT * FROM parentstudtbl where parentid='$id'");
+	while ($row = mysqli_fetch_array($select)) {
+		echo $row['studid'];
+	}
+}
+
+if(isset($_POST['btnAddRegistrar']))
+{
+	$username = validate($_POST['txtUsername']);
+	$firstname = validate($_POST['txtFirstname']);
+	$lastname = validate($_POST['txtLastname']);
+	$middlename = validate($_POST['txtMiddlename']);
+	$contact = validate($_POST['txtContact']);
+
+	$crud->insert("usertbl", array("username", "password" ,"fname", "mname", "lname", "contact", "usertype", "profile_pic"), array($username, "registrar123", $firstname, $middlename, $lastname, $contact, "registrar", "images/businessman.png"));		
+
+	echo "<script>alert('Registrar added.');</script>";
+	echo "<script>(function(){ window.location.href='registrar.php'; })()</script>";
+}
+
+if(isset($_POST['editregistrar']))
+{
+	$id = validate($_POST['id']);
+	$username = validate($_POST['txtUsername']);
+	$firstname = validate($_POST['txtFirstname']);
+	$lastname = validate($_POST['txtLastname']);
+	$middlename = validate($_POST['txtMiddlename']);
+	$contact = validate($_POST['txtContact']);
+
+	$crud->update("usertbl", array("id", "username", "fname", "mname", "lname", "contact"), array($id, $username, $firstname, $middlename, $lastname, $contact));
+
+	echo "<script>alert('Saved.');</script>";
+	echo "<script>(function(){ window.location.href='registrar.php'; })()</script>";
+}
+
+if(isset($_POST['btnedit']))
+{
+	$curid = validate($_POST['curid']);
+	$gradeid = validate($_POST['gradeid']);
+
+	$query = "SELECT * FROM tblclass WHERE cur_id = " . $curid . " AND yearlevelid = " . $gradeid;
+	$result = mysqli_query($con, $query);
+
+	while($row = mysqli_fetch_array($result))
+	{
+		$data[] = $row;
+	}
+	print json_encode($data);
+}
+
+if(isset($_POST['del_slidepic']))
+{
+	if(!empty($_POST['slideid']))
+	{
+		$slideid = $_POST['slideid'];
+		$N = count($slideid);
+		for($i=0; $i < $N; $i++)
+		{
+			mysqli_query($con, "DELETE from slide_tbl where id = '$slideid[$i]'")or die(mysqli_error($con));
+		}
+		echo "<script>alert('Slide deleted.');</script>";
+		echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
+	}
+	else
+	{
+
+		echo "<script>alert('Please select a slide you want to delete, thank you!');</script>";
+		echo "<script>(function(){ window.location.href='slideshow.php'; })()</script>";
+	}
+}
+
+
+if(isset($_POST['del_message']))
+{
+	if(!empty($_POST['msg']))
+	{
+		$msg = $_POST['msg'];
+		$n = count($msg);
+
+		for($i = 0; $i < $n; $i++)
+		{
+			mysqli_query($con, "DELETE from conversation_tbl where C_ID = '$msg[$i]'")or die(mysqli_error($con));
+		}
+		echo "<script>alert('Message deleted.');</script>";
+		echo "<script>(function(){ window.location.href='inbox.php'; })()</script>";
+	}
+	else
+	{
+		echo "<script>alert('Please select a message you want to delete, thank you!');</script>";
+		echo "<script>(function(){ window.location.href='inbox.php'; })()</script>";
+	}
+}
+
+if(isset($_POST['studbygrdlvl']))
+{
+	$gradelevel = $_POST['gradelevel'];
+	$type = $_POST['type'];
+
+	$sy = mysqli_query($con, "SELECT * FROM tblschoolyear where status='0'")or die(mysqli_error($con));
+	$rowsy = mysqli_fetch_array($sy);
+	$schoolyearid = $rowsy['id'];
+
+	$result = mysqli_query($con, "SELECT *, s.id as studid FROM tblstudentclass sc
+		LEFT JOIN usertbl s ON sc.studentid = s.id
+		where sc.schoolyearid='$schoolyearid' and gradelevel='$gradelevel' group by studid")or die(mysqli_error($con));
+
+	if(mysqli_num_rows($result) > 0){
+		?>
+		<table class="table table-bordered table-stripe" id="sample"> 
+			<thead> 
+				<tr>
+					<th>#</th> 
+					<th>Student ID</th>
+					<th>Image</th>
+					<th>Full Name</th> 
+					<th></th>
+				</tr> 
+			</thead>
+			<tbody style="color:black;"> 
+				<?php
+				$cnt = 0;
+				while($row = mysqli_fetch_array($result)) { 
+					$userid = $row['studid']; 
+					?>
+					<tr> 
+						<th class="text-center" width="40" scope="row"><?php echo $cnt = $cnt + 1; ?></th>
+						<td><?php echo $row['username']; ?></td> 
+						<td width="40"><img class="img-circle img-sm" src="<?php echo $row['profile_pic'] ?>"></td>
+						<td><?php echo $row['lname'].", ".$row['fname']." ". $row['mname']; ?></td>
+						<td width="120" class="text-center"><a <?php if($type == '1'){ ?> href="stud_grade.php<?php echo '?uid='.$userid; ?>" <?php }else{ ?> href="stud_clearance.php<?php echo '?uid='.$userid; ?>" <?php } ?> class="btn btn-primary btn-sm"><?php if($type == '1'){ ?>View Grades<?php }else{ ?>View Clearance<?php } ?></a></td> 
+					</tr> 
+					<?php } ?>
+				</tbody> 
+			</table>
+			<?php }else{ ?>
+			<div class="alert alert-danger">No data found.</div>
+			<?php } ?> 
+			<script>
+				$(document).ready(function(){
+					$('#sample').dataTable({
+						"sSearch": '<span class="fa fa-search form-control-feedback"></span>'
+					});
+					$('div.dataTables_filter input').attr('placeholder', 'Search...');
+				});
+			</script>
+			<?php } ?>									

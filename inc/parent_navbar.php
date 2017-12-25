@@ -2,7 +2,11 @@
 	<nav class="navbar navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">
-				<a href="teacher_dashboard.php" class="navbar-brand"><span class="logo-lg"><b><img src="images/logo.png" width="34" height="32">Divine Grace School</b></span></a>
+				<?php
+				$q = mysqli_query($con, "SELECT * FROM logotbl limit 1");
+				$row = mysqli_fetch_array($q);
+				?>
+				<a href="parent_dashboard.php" class="navbar-brand"><span class="logo-lg"><b><img src="images/<?php echo $row['logo']; ?>" width="34" height="32"> Divine Grace School</b></span></a>
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 					<i class="fa fa-bars"></i>
 				</button>
@@ -12,14 +16,12 @@
 			</form>
 			<div class="navbar-custom-menu">
 				<ul class="nav navbar-nav">
-					<li><a href="teacher_dashboard.php"><i class="fa fa-home fa-lg"></i> Home</a></li>
+					<li><a href="parent_dashboard.php"><i class="fa fa-home fa-lg"></i> Home</a></li>
 					<?php 
 					$select_mes = mysqli_query($con,"SELECT * from conversation_tbl where (user_one='$sessionid' and user1_mes_status='1') or (user_two='$sessionid' and user2_mes_status='1')")or die(mysqli_error($con));
 					$cntmes = mysqli_num_rows($select_mes);
 					?>
 					<li><a onclick="checkstatus()" href="#"><i class="fa fa-envelope-o fa-lg"></i> &nbsp;Messages <span class="label label-primary"><?php if ($cntmes > 0){ echo $cntmes; } else { echo ""; } ?></span></a></li>
-					<li><a href="mygrades.php"><i class="fa fa-book fa-lg"></i> &nbsp;Grades</a></li>
-					<li><a href="studclearance.php"><i class="fa fa-file fa-lg"></i> &nbsp;Clearance</a></li>
 					<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span class="hidden-xs"><i class="fa fa-cog fa-lg"></i> &nbsp;Settings</span>

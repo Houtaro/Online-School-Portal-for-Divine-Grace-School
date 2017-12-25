@@ -61,7 +61,6 @@
 
 													?>
 													<td><button type="button" style="margin:0px;" userid="<?php echo $row['id']; ?>" firstname="<?php echo $row['fname']; ?>" middlename="<?php echo $row['mname']; ?>" lastname="<?php echo $row['lname']; ?>" username="<?php echo $row['username']; ?>" contact="<?php echo $row['contact']; ?>" class="btn btn-success btn-sm" data-toggle="tooltip" title="Edit" onclick="edit(this)"> <i class="fa fa-edit"></i></button>
-														<a data-toggle="tooltip" data-placement="left" title="Add Student Parent" href="addstud_parent.php<?php echo '?id='. $row['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
 													</td> 
 												</tr> 
 												<?php } ?>
@@ -139,16 +138,12 @@
 				$("#btn_edit").hide();
 				$("#btnAddStudent").show();
 			})
-
-
-
+			
 			function activeInactive(obj)
 			{
 				$("#studid").val($(obj).attr("studid"));
 				document.activeInactiveStudentForm.submit();
 			}
-
 		</script>
-
 	</body>
 	</html>

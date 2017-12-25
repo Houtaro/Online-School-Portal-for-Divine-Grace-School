@@ -1,8 +1,12 @@
+<?php
+$q = mysqli_query($con, "SELECT * FROM logotbl limit 1");
+$row = mysqli_fetch_array($q);
+?>
 <!-- START OF THE HEADER -->
 <header class="main-header">
 	<a href="admin_dashboard.php" class="logo">
-		<span class="logo-mini"><img src="images/logo.png" width="34" height="32"></span>
-		<span class="logo-lg"><b><img src="images/logo.png" width="34" height="32"> D.G.S</b></span>
+		<span class="logo-mini"><img src="images/<?php echo $row['logo']; ?>" width="34" height="32"></span>
+		<span class="logo-lg"><b><img src="images/<?php echo $row['logo']; ?>" width="34" height="32"> D.G.S</b></span>
 	</a>
 	<nav class="navbar navbar-static-top">
 		<a class="sidebar-toggle" data-toggle="offcanvas" role="button">

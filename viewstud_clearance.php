@@ -17,19 +17,21 @@
 						<?php 
 						if(isset($_GET['subid']) && isset($_GET['classid']))
 						{
-							$classid = addslashes($_GET['subid']);
-							$subid = addslashes($_GET['classid']);
-							$result = mysqli_query($con, "SELECT *,sg.id as sgid, sb.id as subid, c.id as clasid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
+							$classid = addslashes($_GET['classid']);
+							$subid = addslashes($_GET['subid']);
+							$sy = mysqli_query($con, "SELECT * FROM tblschoolyear where status='0'")or die(mysqli_error($con));
+							$rowsy = mysqli_fetch_array($sy);
+							$schoolyearid = $rowsy['id'];
+
+							$result = mysqli_query($con, "SELECT *,sg.id as sgid, sc.id as scid, sb.id as subid, c.id as clasid, CONCAT(t.lname, ', ', t.fname, ' ', t.mname)  as tname, CONCAT(s.lname, ', ', s.fname, ' ', s.mname)  as sname
 								FROM tblstudentgrade sg
-								LEFT JOIN tblstudentclass sc ON sg.classid = sc.classid
-								AND sg.studentid = sc.studentid
-								AND sg.subjectid = sc.subjectid
+								LEFT JOIN tblstudentclass sc ON sg.classid = sc.classid AND sg.studentid = sc.studentid
 								LEFT JOIN usertbl s ON sg.studentid = s.id
 								LEFT JOIN tblteacheradvisory ta ON sg.classid = ta.classid
 								LEFT JOIN usertbl t ON sg.adviserid = t.id
 								LEFT JOIN tblclass c ON sg.classid = c.id
 								LEFT JOIN tblsubjects sb on sg.subjectid = sb.id
-								where sg.adviserid = '".$sessionid."' and sg.subjectid='".$subid."' and sg.classid='".$classid."' group by sgid")or die(mysqli_error($con));
+								where sg.adviserid = '".$sessionid."' and sg.subjectid='".$subid."' and sg.classid='".$classid."' and ta.schoolyearid='$schoolyearid' group by sgid")or die(mysqli_error($con));
 								?>
 								<div class="box-body">
 									<?php if(mysqli_num_rows($result) > 0){ $counter = 0; ?>
@@ -43,17 +45,15 @@
 											</tr> 
 										</thead>
 										<tbody> 
-											<?php
-											while($row = mysqli_fetch_array($result)) {  
-												?>
-												<tr> 
-													<td class="text-center" width="40"><?php echo $counter = $counter + 1; ?></td>
-													<td><?php echo $row['sname']; ?></td>
-													<td><?php echo $row['subjectname']." - ".$row['description']; ?></td>
-													<td width="130" class="text-center"><?php if($row['clearance_status'] == 0) { ?>
-													<button name="statusclearance" onclick='activeInactive("<?php echo $row['sgid']; ?>")' class='btn btn-success'>Cleared</button>
+											<?php while($row = mysqli_fetch_array($result)) { ?>
+											<tr> 
+												<td class="text-center" width="40"><?php echo $counter = $counter + 1; ?></td>
+												<td><?php echo $row['sname']; ?></td>
+												<td><?php echo $row['subjectname']." - ".$row['description']; ?></td>
+												<td width="130" class="text-center"><?php if($row['clearance_status'] == 0) { ?>
+													<button name="statusclearance" onclick='activeInactive("<?php echo $row['scid']; ?>")' class='btn btn-success'>Cleared</button>
 													<?php } else { ?>
-													<button name="statusclearance" onclick='activeInactive("<?php echo $row['sgid']; ?>")' class='btn btn-danger'>Not Cleared</button>
+													<button name="statusclearance" onclick='activeInactive("<?php echo $row['scid']; ?>")' class='btn btn-danger'>Not Cleared</button>
 													<?php } ?> 
 												</td>
 											</tr> 
@@ -67,6 +67,8 @@
 									<div class="alert alert-danger">No data found.</div>
 									<?php } ?>
 								</div>
+								<?php }else{ ?>
+								<div class="alert alert-danger">No data found.</div>
 								<?php } ?>
 							</form>
 						</div>
