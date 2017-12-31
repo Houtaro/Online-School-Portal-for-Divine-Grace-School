@@ -445,14 +445,15 @@ if(isset($_POST['add_studclass']))
 
 if(isset($_POST['edit_studclass']))
 {
-	$studclass_id = $_POST['stud_class_id'];
+	$studclass_id = validate($_POST['stud_class_id']);
 	$classid = validate($_POST['cboclass']);
 	$studentid = validate($_POST['cboStudent']);
-	$cur_id = validate($_POST['cbocurriculum']);
-	$gradeid = validate($_POST['cbogradelevel']);
+	//$cur_id = validate($_POST['cbocurriculum']);
+	//$gradeid = validate($_POST['cbogradelevel']);
 
-	$crud->update("tblstudentclass", array("id", "classid", "studentid", "cur_id", "gradelevel"), array($studclass_id,$classid,$studentid, $cur_id, $gradeid));
-
+	//echo $studclass_id . " 1 " . $classid . " 2 " . $studentid;
+	$crud->update("tblstudentclass", array("id", "classid", "studentid"), array($studclass_id, $classid, $studentid));
+	//$crud->getQuery();
 	echo "<script>alert('Student Class updated.');</script>";
 	echo "<script>(function(){ window.location.href='student_class.php'; })()</script>";
 }
@@ -947,9 +948,19 @@ if(isset($_POST['updateAdmin']))
 	$lastname = validate($_POST['txtLastname']);
 	$middlename = validate($_POST['txtMiddlename']);
 	$contact = validate($_POST['txtContact']);
-	$crud->update("usertbl", array("id", "username", "fname", "mname", "lname", "contact"), array($adminid, $username, $firstname, $middlename, $lastname, $contact));
+	$accessrights = $_POST['accessrights'];
+
+	$del_accr_query = "DELETE FROM access_rights WHERE userid = '$adminid'";
+	mysqli_query($con, $del_accr_query);
+
+	for ($i = 0; $i < count($accessrights); $i++) { 
+		$insert_accr_query = "INSERT INTO access_rights(userid, privilege) VALUES ('$adminid', '$accessrights[$i]')";
+		mysqli_query($con, $insert_accr_query);
+	}
+
 	echo "<script>alert('Saved.');</script>";
 	echo "<script>(function(){ window.location.href='admin_user.php'; })()</script>";
+	
 }
 
 if(isset($_POST['btnActiveAdmin']))
@@ -1060,10 +1071,9 @@ if(isset($_POST['edit_empadvisory'])){
 	echo $curid . "," . $gradelvl . "," . $classid . "," . $teacherid . "," . $subid;
 }
 
-//today
-
 if(isset($_POST['edit_stud_class'])){
-	$id = validate($_POST['id']);
+	
+	$studentname = "";$id = validate($_POST['id']);
 
 	$query1 = "SELECT * FROM tblstudentclass WHERE id = $id";
 	$result1 = mysqli_query($con, $query1);
@@ -1081,7 +1091,7 @@ if(isset($_POST['edit_stud_class'])){
 		$gradeid = $row['gradelevel'];
 	}
 
-//get curriculum name
+	//get curriculum name
 	$query2 = "SELECT curname FROM curriculumtbl WHERE id = $cur_id";
 	$result2 = mysqli_query($con, $query2);
 
@@ -1101,7 +1111,7 @@ if(isset($_POST['edit_stud_class'])){
 		$gradelevel = $row['yearlevel'];
 	}
 
-//get class name
+	//get class name
 	$query4 = "SELECT classname FROM tblclass WHERE id = $classid";
 	$result4 = mysqli_query($con, $query4);
 
@@ -1111,11 +1121,10 @@ if(isset($_POST['edit_stud_class'])){
 		$classname = $row['classname'];
 	}
 
-//get student name
+	//get student name
 	$query5 = "SELECT fname, lname FROM usertbl WHERE id = $studid AND usertype = 'student'";
 	$result5 = mysqli_query($con, $query5);
 
-	$studentname = "";
 	while($row = mysqli_fetch_array($result5))
 	{
 		$studentname = $row['fname'] . " " . $row['lname'];
@@ -1550,4 +1559,28 @@ if(isset($_POST['studbygrdlvl']))
 					$('div.dataTables_filter input').attr('placeholder', 'Search...');
 				});
 			</script>
-			<?php } ?>									
+			<?php } 
+
+		if(isset($_POST['editAdmin']))
+		{
+			$admin_id = $_POST['adminid'];
+
+			$query = "SELECT privilege FROM access_rights WHERE userid = " . $admin_id;
+			$privileges = mysqli_query($con, $query);
+
+			$data = [];
+			while($row = mysqli_fetch_array($privileges))
+			{
+				$data[] = $row;
+			}
+
+			print json_encode($data);
+
+		}
+
+
+
+			?>
+
+
+

@@ -152,8 +152,9 @@
 
 													<button type="submit" id="add_studclass" name="add_studclass" class="btn btn-primary">Enroll</button>
 													<button type="button" id="btn_back" style="display:none;" class="btn btn-default">Back</button>
-													<button type="submit" id="btn_edit" style="display:none;" name="edit_studclass" class="btn btn-success">Update</button>
-													<input type="hidden" name="stud_class_id" id="stud_class_id">
+													<button type="submit" id="btn_edit" style="display:none;" name="edit_studclass" class="btn btn-success" >Update</button>
+
+													<input type="text" name="stud_class_id" id="stud_class_id">
 
 													<div id="getstudent"></div>
 													<!-- for generate class -->

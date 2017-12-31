@@ -41,12 +41,12 @@
         throw new Exception("Third argument of function 'insert' must be an array");
       }
 
-      $this->queryBuilder .= "INSERT into " . $tableName . "(";
+      $this->queryBuilder .= "INSERT INTO " . $tableName . "(";
       for ( $i = 0; $i < count($columnNames); $i++ ) {
         $this->queryBuilder .=  ( $i == count($columnNames) - 1 ) ? $columnNames[$i] . ") VALUES ('" : $columnNames[$i] . ", ";
       }
 
-      for ( $i = 0; $i < count($values); $i++) {
+      for ( $i = 0; $i < count($values); $i++ ) {
         $this->queryBuilder .=  ( $i == count($values) - 1) ? $values[$i] . "')"  : $values[$i] . "', '";
       }
 
@@ -76,7 +76,7 @@
       }
       mysqli_query($this->con, $this->queryBuilder)or die(mysqli_error($this->con));
       
-      $this->queryBuilder = "";
+      //$this->queryBuilder = "";
     }
 
     /* NOTE: second parameter is a PK Column of a table */

@@ -95,37 +95,37 @@
 
 										<h3>Access Rights</h3>
 										<hr style="margin-top: 0px;margin-bottom: 10px;">
-										<label><input type="checkbox" name="accessrights[]" value="1"> Dashboard</label>
+										<label><input type="checkbox" id="cb1" name="accessrights[]" value="1"> Dashboard</label>
 										<br>
 										<label style="margin-top: 14px;">Maintenance:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="2"> School Year</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="3"> Grade Level</label>
-										<label><input type="checkbox" name="accessrights[]" value="4"> Curriculum</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="5"> Subject</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="6"> Class</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="7"> Administrator</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="8"> Registrar</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="9"> Teacher</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="10"> Student</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="11"> Parent</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="12"> Clearance</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="13"> Announcement</label>
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="14"> Events</label>
-										<label><input type="checkbox" name="accessrights[]" value="15"> Slide Show</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb2" name="accessrights[]" value="2"> School Year</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb3" name="accessrights[]" value="3"> Grade Level</label>
+										<label><input type="checkbox" id="cb4" name="accessrights[]" value="4"> Curriculum</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb5" name="accessrights[]" value="5"> Subject</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb6" name="accessrights[]" value="6"> Class</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb7" name="accessrights[]" value="7"> Administrator</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb8" name="accessrights[]" value="8"> Registrar</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb9" name="accessrights[]" value="9"> Teacher</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb10" name="accessrights[]" value="10"> Student</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb11" name="accessrights[]" value="11"> Parent</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb12" name="accessrights[]" value="12"> Clearance</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb13" name="accessrights[]" value="13"> Announcement</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb14" name="accessrights[]" value="14"> Events</label>
+										<label><input type="checkbox" id="cb15" name="accessrights[]" value="15"> Slide Show</label>
 										<br>
 										<label style="margin-top: 14px;">Transaction:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label style="margin-right: 10px;"><input type="checkbox" name="accessrights[]" value="16"> Enroll Student</label>
-										<label><input type="checkbox" name="accessrights[]" value="17"> Teacher Advisory</label>
+										<label style="margin-right: 10px;"><input type="checkbox" id="cb16" name="accessrights[]" value="16"> Enroll Student</label>
+										<label><input type="checkbox" id="cb17" name="accessrights[]" value="17"> Teacher Advisory</label>
 										<br>
 										<label style="margin-top: 14px;">Reports:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label><input type="checkbox" name="accessrights[]" value="18"> Clearance and Grades Reports</label>
+										<label><input type="checkbox" id="cb18" name="accessrights[]" value="18"> Clearance and Grades Reports</label>
 										<br>
 										<label style="margin-top: 14px;">Utilities:</label>
 										<hr style="margin-top: 0px;margin-bottom: 4px;">
-										<label><input type="checkbox" name="accessrights[]" value="19"> Activity Log</label>
+										<label><input type="checkbox" id="cb19" name="accessrights[]" value="19"> Activity Log</label>
 
 										<br><br>
 										<input type="hidden" id="adminid" name="adminid" value="">
@@ -169,6 +169,41 @@
 				$("#btnAddAdmin").hide();
 				$("#updateAdmin").show();
 				$("#btn_back").show();
+
+				$.ajax({
+					type: 'post',
+					url: 'crud_function.php',
+					data:{
+						editAdmin: '1',
+						adminid: id
+					},
+					success: function(result)
+					{
+						var data = JSON.parse(result);
+						var checkboxes = $('[name = "accessrights[]"]');
+						var privileges = [];
+
+						for(var i = 0; i < data.length; i++)
+						{
+							privileges.push(data[i].privilege);
+						}
+
+						for(var i = 1; i <= checkboxes.length; i++)
+						{
+							var id = "#" + $(checkboxes[i - 1]).attr('id');
+							
+							if(privileges[i - 1] == i)
+							{
+								$(id).prop('checked', true);
+							}
+							else
+							{
+								$(id).prop('checked', false);
+							}
+							
+						}
+					}
+				});
 			}
 			function activeInactiveAdmin(id)
 			{
