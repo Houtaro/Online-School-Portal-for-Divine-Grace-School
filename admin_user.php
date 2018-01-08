@@ -158,6 +158,8 @@
 				$("#txtContact").val("");
 				$("#adminid").val("");
 			}
+
+
 			function editAdmin(id, fname, mname, lname, contact, username)
 			{
 				$("#txtUsername").val(username);
@@ -182,6 +184,7 @@
 						var data = JSON.parse(result);
 						var checkboxes = $('[name = "accessrights[]"]');
 						var privileges = [];
+						var ids = [];
 
 						for(var i = 0; i < data.length; i++)
 						{
@@ -190,18 +193,26 @@
 
 						for(var i = 1; i <= checkboxes.length; i++)
 						{
+							ids.push("#" + $(checkboxes[i - 1]).attr('id'));
+						}
+
+
+						for(var i = 1, j = 0; i <= checkboxes.length; i++)
+						{
 							var id = "#" + $(checkboxes[i - 1]).attr('id');
-							
-							if(privileges[i - 1] == i)
+
+							if(privileges[j] == i)
 							{
 								$(id).prop('checked', true);
+								j++;
 							}
 							else
 							{
 								$(id).prop('checked', false);
 							}
-							
+
 						}
+
 					}
 				});
 			}
