@@ -191,12 +191,6 @@
 							privileges.push(data[i].privilege);
 						}
 
-						for(var i = 1; i <= checkboxes.length; i++)
-						{
-							ids.push("#" + $(checkboxes[i - 1]).attr('id'));
-						}
-
-
 						for(var i = 1, j = 0; i <= checkboxes.length; i++)
 						{
 							var id = "#" + $(checkboxes[i - 1]).attr('id');
@@ -210,9 +204,7 @@
 							{
 								$(id).prop('checked', false);
 							}
-
 						}
-
 					}
 				});
 			}
